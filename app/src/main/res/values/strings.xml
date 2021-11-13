@@ -2,4 +2,8 @@
     <string name="app_name">TAMa</string>
     <string name="title_home">Home</string>
     <string name="title_events">Events</string>
+    <string name="title_locations">Locations</string>
+    <string name="add_location">Add Location</string>
+    <string name="delete_location">Delete Location</string>
+    <string name="placeholder_location_name">Bozetechova</string>
 </resources>
