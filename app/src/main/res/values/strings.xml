@@ -6,6 +6,4 @@
     <string name="add_location">Add Location</string>
     <string name="delete_location">Delete Location</string>
     <string name="placeholder_location_name">Bozetechova</string>
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

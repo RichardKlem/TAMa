@@ -42,9 +42,4 @@ class MainActivity : AppCompatActivity() {
 
         DataFetcher.fetchData(this, "2021-10-24T22:00:00.000Z", "2021-11-01T22:59:59.999Z")
     }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.bottom_nav_menu, menu)
-        return true
-    }
 }
