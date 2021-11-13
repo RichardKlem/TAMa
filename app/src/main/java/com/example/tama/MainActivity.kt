@@ -2,6 +2,7 @@ package com.example.tama
 
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
 import androidx.annotation.RequiresApi
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.navigation_home, R.id.navigation_dashboard
+                R.id.navigation_dashboard, R.id.navigation_events
             )
         )
 
@@ -39,6 +40,11 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        DataFetcher.fetchData(this, "2021-10-24T22:00:00.000Z", "2021-11-01T22:59:59.999Z");
+        DataFetcher.fetchData(this, "2021-10-24T22:00:00.000Z", "2021-11-01T22:59:59.999Z")
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.bottom_nav_menu, menu)
+        return true
     }
 }
