@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.example.tama.data.entity.Cleaning
@@ -20,14 +19,14 @@ class DataFetcher {
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
         fun fetchData(context: Context, from: String, to: String) {
-            var streets = mutableListOf<Street>()
-            var cleanings = mutableListOf<Cleaning>()
+            val streets = mutableListOf<Street>()
+            val cleanings = mutableListOf<Cleaning>()
 
             val queue = Volley.newRequestQueue(context)
 
             val streetsUrl = "https://cisteni.bkom.cz/api/street"
             val streetsRequest = JsonObjectRequest(Request.Method.GET, streetsUrl, null,
-                Response.Listener { response ->
+                { response ->
                     val streetsArray = response.getJSONArray("streets")
                     for (i in 0 until streetsArray.length()) {
                         val streetObject = streetsArray.getJSONObject(i)
@@ -44,7 +43,7 @@ class DataFetcher {
                     }
                     print("Streets loaded")
                 },
-                Response.ErrorListener { error ->
+                { error ->
                     // TODO: Handle error
                 }
             )
@@ -52,13 +51,13 @@ class DataFetcher {
             val cleaningsUrl =
                 "https://cisteni.bkom.cz/api/sweep/map?from=%s&to=%s".format(from, to)
             val cleaningsRequest = JsonObjectRequest(Request.Method.GET, cleaningsUrl, null,
-                Response.Listener { response ->
+                { response ->
                     val cleaningsArray = response.getJSONArray("sweeps")
                     for (i in 0 until cleaningsArray.length()) {
                         val cleaningObject = cleaningsArray.getJSONObject(i)
-                        val from =
+                        val fromDate =
                             DateTimeFormatter.ISO_DATE_TIME.parse(cleaningObject.getString("from"))
-                        val to =
+                        val toDate =
                             DateTimeFormatter.ISO_DATE_TIME.parse(cleaningObject.getString("to"))
                         val sectionObject = cleaningObject.getJSONObject("section")
                         val waypointsArray = sectionObject.getJSONArray("waypoints")
@@ -83,8 +82,8 @@ class DataFetcher {
                             val cleaningEntity = Cleaning(
                                 cleaningObject.getInt("id"),
                                 cleaningObject.getString("name"),
-                                Date.from(Instant.from(from)),
-                                Date.from(Instant.from(to)),
+                                Date.from(Instant.from(fromDate)),
+                                Date.from(Instant.from(toDate)),
                                 cleaningObject.getInt("sid"),
                                 Section(
                                     sectionObject.getInt("id"),
@@ -101,7 +100,7 @@ class DataFetcher {
                     }
                     print("Cleanings loaded")
                 },
-                Response.ErrorListener { error ->
+                { error ->
                     // TODO: Handle error
                 }
             )
