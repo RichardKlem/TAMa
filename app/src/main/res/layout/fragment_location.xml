@@ -33,7 +33,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvLocationItems"
         app:layout_constraintEnd_toEndOf="@+id/rvLocationItems"
         app:layout_constraintStart_toStartOf="@+id/rvLocationItems"
-        app:srcCompat="@android:drawable/ic_menu_add"
+        app:srcCompat="@drawable/plus"
         tools:ignore="SpeakableTextPresentCheck" />
 
 
