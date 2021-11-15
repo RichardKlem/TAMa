@@ -47,13 +47,4 @@ class MapsFragment : Fragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
     }
-
-    private fun navigateBack() {
-//        setFragmentResult(
-//            NoteListFragment.ADD_NOTE, bundleOf(
-//                NoteListFragment.NOTE to binding.editText.text.toString()
-//            )
-//        )
-        findNavController().popBackStack()
-    }
 }
