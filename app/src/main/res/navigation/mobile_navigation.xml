@@ -21,6 +21,19 @@ app:startDestination="@+id/navigation_dashboard">
     android:id="@+id/navigation_dashboard"
     android:name="com.example.tama.ui.locations.LocationFragment"
     android:label="@string/title_home"
-    tools:layout="@layout/fragment_location" />
+    tools:layout="@layout/fragment_location" >
+    <action
+        android:id="@+id/action_navigation_dashboard_to_mapsFragment"
+        app:destination="@id/mapsFragment" />
+</fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="com.example.tama.ui.home.MapsFragment"
+        android:label="fragment_maps"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
+    </fragment>
 
 </navigation>
