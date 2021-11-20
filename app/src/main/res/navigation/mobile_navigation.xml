@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:id="@+id/mobile_navigation"
-app:startDestination="@+id/navigation_dashboard">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_dashboard">
 
-<fragment
-    android:id="@+id/navigation_home"
-    android:name="com.example.tama.ui.home.HomeFragment"
-    android:label="@string/title_home"
-    tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.tama.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
 
-<fragment
-    android:id="@+id/navigation_events"
-    android:name="com.example.tama.ui.events.EventsFragment"
-    android:label="@string/title_events"
-    tools:layout="@layout/fragment_events" />
+    <fragment
+        android:id="@+id/navigation_events"
+        android:name="com.example.tama.ui.events.EventsFragment"
+        android:label="@string/title_events"
+        tools:layout="@layout/fragment_events" />
 
-<fragment
-    android:id="@+id/navigation_dashboard"
-    android:name="com.example.tama.ui.locations.LocationFragment"
-    android:label="@string/title_home"
-    tools:layout="@layout/fragment_location" >
-    <action
-        android:id="@+id/action_navigation_dashboard_to_mapsFragment"
-        app:destination="@id/mapsFragment" />
-</fragment>
+    <fragment
+        android:id="@+id/navigation_dashboard"
+        android:name="com.example.tama.ui.locations.LocationFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_location" />
     <fragment
         android:id="@+id/mapsFragment"
         android:name="com.example.tama.ui.home.MapsFragment"
         android:label="fragment_maps"
-        tools:layout="@layout/fragment_maps" >
-        <action
-            android:id="@+id/action_mapsFragment_to_navigation_dashboard"
-            app:destination="@id/navigation_dashboard" />
-    </fragment>
+        tools:layout="@layout/fragment_maps" />
+    <activity
+        android:id="@+id/mapsActivity"
+        android:name="com.example.tama.MapsActivity"
+        android:label="MapsActivity"
+        tools:layout="@layout/activity_maps"/>
 
 </navigation>

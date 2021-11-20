@@ -18,6 +18,12 @@ import com.example.tama.ui.home.MapsFragment
 import com.example.tama.ui.locations.LocationFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
+import android.view.View
+import android.widget.Button
+import android.content.Intent
+
+
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
@@ -46,6 +52,8 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment: NavHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController: NavController = navHostFragment.navController
+        val button = findViewById<View>(R.id.button2) as Button
+        button.setOnClickListener { openNewActivity() }
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -59,6 +67,10 @@ class MainActivity : AppCompatActivity() {
         }.commit()
         initListeners()
         nav_view.itemIconTintList = null
+    }
+    private fun openNewActivity() {
+        val intent = Intent(this, MapsActivity::class.java)
+        startActivity(intent)
     }
 
     private fun initListeners() {
