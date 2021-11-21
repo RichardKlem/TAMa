@@ -1,10 +1,13 @@
 package com.example.tama
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import androidx.annotation.RequiresApi
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -16,17 +19,17 @@ import com.example.tama.databinding.ActivityMainBinding
 import com.example.tama.ui.events.EventsFragment
 import com.example.tama.ui.home.MapsFragment
 import com.example.tama.ui.locations.LocationFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
-
-import android.view.View
-import android.widget.Button
-import android.content.Intent
-
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private var selectedLatLng: LatLng? = null
+    private var bundle: Bundle = Bundle()
 
     private val fragmentManager = supportFragmentManager
     private val eventFragment = EventsFragment()
@@ -40,6 +43,38 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val i = intent
+        val extras = i.extras
+        if (extras?.containsKey("SelectedLatLng") == true) {
+            selectedLatLng = i.getParcelableExtra("SelectedLatLng")
+        }
+
+        bundle.putParcelable("SelectedLatLng", selectedLatLng)
+        locationFragment.arguments = bundle
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                )
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
+                )
+            } else {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), 1
+                )
+            }
+        }
+
         val navView: BottomNavigationView = binding.navView
 
         // Passing each menu ID as a set of Ids because each
@@ -50,10 +85,9 @@ class MainActivity : AppCompatActivity() {
             )
         )
 
-        val navHostFragment: NavHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
+        val navHostFragment: NavHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
         val navController: NavController = navHostFragment.navController
-        val button = findViewById<View>(R.id.button2) as Button
-        button.setOnClickListener { openNewActivity() }
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
@@ -62,34 +96,35 @@ class MainActivity : AppCompatActivity() {
 
         fragmentManager.beginTransaction().apply {
             add(R.id.container, locationFragment, getString(R.string.title_events))
-            add(R.id.container, eventFragment, getString(R.string.title_locations)).hide(eventFragment)
+            add(R.id.container, eventFragment, getString(R.string.title_locations)).hide(
+                eventFragment
+            )
             add(R.id.container, mapFragment, getString(R.string.title_map)).hide(mapFragment)
         }.commit()
         initListeners()
         nav_view.itemIconTintList = null
-    }
-    private fun openNewActivity() {
-        val intent = Intent(this, MapsActivity::class.java)
-        startActivity(intent)
     }
 
     private fun initListeners() {
         nav_view.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_events -> {
-                    fragmentManager.beginTransaction().hide(activeFragment).show(eventFragment).commit()
+                    fragmentManager.beginTransaction().hide(activeFragment).show(eventFragment)
+                        .commit()
                     activeFragment = eventFragment
                     true
                 }
 
                 R.id.navigation_dashboard -> {
-                    fragmentManager.beginTransaction().hide(activeFragment).show(locationFragment).commit()
+                    fragmentManager.beginTransaction().hide(activeFragment).show(locationFragment)
+                        .commit()
                     activeFragment = locationFragment
                     true
                 }
 
                 R.id.mapsFragment -> {
-                    fragmentManager.beginTransaction().hide(activeFragment).show(mapFragment).commit()
+                    fragmentManager.beginTransaction().hide(activeFragment).show(mapFragment)
+                        .commit()
                     activeFragment = mapFragment
                     true
                 }

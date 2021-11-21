@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,13 +10,25 @@
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
 
-    <androidx.appcompat.widget.SearchView
+    <SearchView
         android:id="@+id/idSearchView"
+        style="@style/searchbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:background="#BFBFBF"
         android:elevation="5dp"
-        app:iconifiedByDefault="false"
-        app:queryHint="Search Here" />
+        android:iconifiedByDefault="false"
+        android:queryHint="Search Address"
+
+        />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="67dp"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="620dp"
+        android:layout_marginEnd="140dp"
+        android:layout_marginBottom="34dp"
+        android:text="Add this street" />
 </RelativeLayout>
