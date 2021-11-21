@@ -1,6 +1,8 @@
 package com.example.tama.ui.locations
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -16,6 +18,7 @@ import com.example.tama.databinding.FragmentLocationBinding
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.fragment_location.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class LocationFragment : Fragment() {
@@ -43,6 +46,13 @@ class LocationFragment : Fragment() {
 
         val addresses: List<Address>
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
+        val sharedPreferences: SharedPreferences =
+            requireActivity().getSharedPreferences("UserLocations", MODE_PRIVATE)
+        // count is the real count - 0 means no location at all, 1 means exactly 1 location etc.
+        val locationCount = sharedPreferences.getInt("count", 0)
+        val locName: MutableList<String> = ArrayList()
+
+        locationAdapter = LocationAdapter(mutableListOf())
 
         val newLatLong: LatLng? = arguments?.getParcelable("SelectedLatLng")
 
@@ -56,16 +66,35 @@ class LocationFragment : Fragment() {
             address = addresses[0].getAddressLine(0)
         }
 
-        locationAdapter = LocationAdapter(mutableListOf())
-
         rvLocationItems.adapter = locationAdapter
         rvLocationItems.layoutManager = LinearLayoutManager(this.context)
 
+        // Load stored user locations.
+        for (i in 0 until locationCount) {
+            // The index after location is count from zero, in difference to the count.
+            locName.add(sharedPreferences.getString("location_${i}", "")!!)
+            locationAdapter.addLocation(
+                Location(
+                    sharedPreferences.getString(
+                        "location_${i}",
+                        ""
+                    )!!
+                )
+            )
+        }
+
+        // If the LocationFragment is created from MapsActivity, create the new location.
         if (newLatLong != null) {
             val locationName = address.toString()
             if (locationName.isNotEmpty()) {
                 val location = Location(locationName)
                 locationAdapter.addLocation(location)
+
+                // Persist the new location
+                val myEdit = sharedPreferences.edit()
+                myEdit.putString("location_${locationCount}", locationName)
+                myEdit.putInt("count", locationCount + 1)
+                myEdit.commit()
             }
         }
 
