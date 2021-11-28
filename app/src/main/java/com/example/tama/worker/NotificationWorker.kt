@@ -22,11 +22,27 @@ import java.util.*
 class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, params) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
-        var currentDate = Calendar.getInstance().time
-        var c = Calendar.getInstance()
+        val currentDate = Calendar.getInstance().time
+        val c = Calendar.getInstance()
         c.add(Calendar.DATE, 1);
-        var endDate = c.time;
-        var dateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val endDate = c.time;
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+
+        if (currentDate.hours in 9..15) {
+            return Result.success()
+        }
+
+        val editor = this.applicationContext.getSharedPreferences("dnd", Context.MODE_PRIVATE)
+        val nextNotificationsTime = editor.getLong("dnd", 0)
+
+        if (currentDate.time < nextNotificationsTime && nextNotificationsTime > 0) {
+            return Result.success()
+        }
+
+        val newDnd = Calendar.getInstance()
+        newDnd.add(Calendar.HOUR, 12)
+        editor.edit().putLong("dnd", newDnd.time.time).apply()
+
 
         DataFetcher.fetchData(this.applicationContext, "${dateFormat.format(currentDate)}T00:00:00.000Z", "${dateFormat.format(endDate)}T20:59:59.999Z") { cleaning: List<Cleaning> ->
             val intent = Intent(this.applicationContext, MainActivity::class.java).apply {
@@ -39,25 +55,35 @@ class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
             val toFormat = SimpleDateFormat("HH.mm")
 
             cleaning.forEach { cleaning ->
-                this.createNotificationChannel("1", "Blokové čistění")
                 var day = fromFormat.format(cleaning.from)
 
-                if (dateFormat.format(cleaning.from) == dateFormat.format(currentDate)) {
-                    day = "Dnes"
-                } else if (dateFormat.format(cleaning.from) == dateFormat.format(endDate)) {
-                    day = "Zítra"
-                }
+                if (cleaning.to >= currentDate)
+                {
+                    this.createNotificationChannel("1", "Blokové čistění")
 
-                var builder = NotificationCompat.Builder(this.applicationContext, "1")
-                    .setSmallIcon(android.R.drawable.ic_dialog_map)
-                    .setContentTitle("${cleaning.name}")
-                    .setContentText("${day} / ${toFormat.format(cleaning.from)} – ${toFormat.format(cleaning.to)} hod")
-                    .setContentIntent(pendingIntent)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    if (dateFormat.format(cleaning.from) == dateFormat.format(currentDate)) {
+                        day = "Dnes"
+                    } else if (dateFormat.format(cleaning.from) == dateFormat.format(endDate)) {
+                        day = "Zítra"
+                    }
 
-                with(NotificationManagerCompat.from(this.applicationContext)) {
-                    // notificationId is a unique int for each notification that you must define
-                    notify(cleaning.id, builder.build())
+                    var builder = NotificationCompat.Builder(this.applicationContext, "1")
+                        .setSmallIcon(android.R.drawable.ic_dialog_map)
+                        .setContentTitle("${cleaning.name}")
+                        .setContentText(
+                            "${day} / ${toFormat.format(cleaning.from)} – ${
+                                toFormat.format(
+                                    cleaning.to
+                                )
+                            } hod"
+                        )
+                        .setContentIntent(pendingIntent)
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+                    with(NotificationManagerCompat.from(this.applicationContext)) {
+                        // notificationId is a unique int for each notification that you must define
+                        notify(cleaning.id, builder.build())
+                    }
                 }
             }
         }
