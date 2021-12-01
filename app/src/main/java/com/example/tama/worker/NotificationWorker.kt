@@ -24,8 +24,8 @@ class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
     override fun doWork(): Result {
         val currentDate = Calendar.getInstance().time
         val c = Calendar.getInstance()
-        c.add(Calendar.DATE, 1);
-        val endDate = c.time;
+        c.add(Calendar.DATE, 1)
+        val endDate = c.time
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         if (currentDate.hours in 9..15) {
