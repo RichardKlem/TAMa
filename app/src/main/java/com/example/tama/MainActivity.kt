@@ -79,7 +79,6 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.goto_settings) {
-            Toast.makeText(this, "setting clicked", Toast.LENGTH_SHORT).show()
             fragmentManager.beginTransaction().hide(activeFragment).show(settingsFragment).commit()
             activeFragment = settingsFragment
             return true
