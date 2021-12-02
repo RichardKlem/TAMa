@@ -15,11 +15,14 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.tama.databinding.ActivityMainBinding
+import com.example.tama.ui.settings.SettingsAdapter
 import com.example.tama.ui.events.EventsFragment
 import com.example.tama.ui.home.MapsFragment
 import com.example.tama.ui.locations.LocationFragment
+import com.example.tama.ui.settings.SettingsFragment
 import com.example.tama.worker.NotificationWorker
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_settings.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private val eventFragment = EventsFragment()
     private val locationFragment = LocationFragment()
     private val mapFragment = MapsFragment()
+    private val settingsFragment = SettingsFragment()
     private var activeFragment: Fragment = locationFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,9 +58,10 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         fragmentManager.beginTransaction().apply {
-            add(R.id.container, locationFragment, getString(R.string.title_events))
+            add(R.id.container, locationFragment, getString(R.string.title_events))//.hide(locationFragment)
             add(R.id.container, eventFragment, getString(R.string.title_locations)).hide(eventFragment)
             add(R.id.container, mapFragment, getString(R.string.title_map)).hide(mapFragment)
+            add(R.id.container, settingsFragment, getString(R.string.settings)).hide(settingsFragment)
         }.commit()
         initListeners()
         nav_view.itemIconTintList = null
@@ -75,6 +80,8 @@ class MainActivity : AppCompatActivity() {
         val id = item.itemId
         if (id == R.id.goto_settings) {
             Toast.makeText(this, "setting clicked", Toast.LENGTH_SHORT).show()
+            fragmentManager.beginTransaction().hide(activeFragment).show(settingsFragment).commit()
+            activeFragment = settingsFragment
             return true
         }
         return super.onOptionsItemSelected(item)
