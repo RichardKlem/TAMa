@@ -6,10 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tama.R
 import com.example.tama.databinding.FragmentEventsBinding
+import com.example.tama.ui.locations.Location
+import com.example.tama.ui.locations.LocationAdapter
+import kotlinx.android.synthetic.main.fragment_events.*
+import kotlinx.android.synthetic.main.fragment_location.*
 
 class EventsFragment : Fragment() {
 
+    private lateinit var eventsAdapter: EventsAdapter
     private lateinit var eventsViewModel: EventsViewModel
     private var _binding: FragmentEventsBinding? = null
 
@@ -27,6 +34,22 @@ class EventsFragment : Fragment() {
 
         _binding = FragmentEventsBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        eventsAdapter = EventsAdapter(mutableListOf())
+
+        rvEventItems.adapter = eventsAdapter
+        rvEventItems.layoutManager = LinearLayoutManager(this.context)
+
+        val eventName = getString(R.string.placeholder_location_name)
+        if (eventName.isNotEmpty()) {
+            val event = Event(eventName)
+            eventsAdapter.addEvent(event)
+        }
+
     }
 
     override fun onDestroyView() {

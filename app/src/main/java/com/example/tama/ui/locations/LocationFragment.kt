@@ -47,6 +47,7 @@ class LocationFragment : Fragment() {
             val locationName = getString(R.string.placeholder_location_name)
             if (locationName.isNotEmpty()) {
                 val location = Location(locationName)
+//                locationAdapter.addLocation(view.context, location)
                 locationAdapter.addLocation(location)
             }
         }
