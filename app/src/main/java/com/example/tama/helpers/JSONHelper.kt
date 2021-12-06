@@ -31,6 +31,16 @@ data class GPS(val lat: Double, val long: Double)
 data class Location(val id: String, var name: String, val gps: GPS)
 
 /**
+ * Data class of user cleaning event.
+ *
+ * @property id Generated [UUID].
+ * @property name Geo package defined name of the Event.
+ * @property gps [GPS] value of the event.
+ */
+@Serializable
+data class Event(val id: String, var name: String, val gps: GPS)
+
+/**
  * Data class wrapping the list of user defined locations.
  * Can be initialized with empty list. This is also valid and useful.
  *
@@ -39,6 +49,14 @@ data class Location(val id: String, var name: String, val gps: GPS)
 @Serializable
 data class UserLocations(val locations: MutableList<Location>)
 
+/**
+ * Data class wrapping the list of user defined locations.
+ * Can be initialized with empty list. This is also valid and useful.
+ *
+ * @property events List of events.
+ */
+@Serializable
+data class LocationEvents(val events: MutableList<Event>)
 
 /**
  * Function to generate [UUID].
@@ -49,7 +67,8 @@ fun createUUID(): String {
     return UUID.randomUUID().toString()
 }
 
-const val FILE_NAME = "locations.json"
+const val LOCATION_FILE_NAME = "locations.json"
+const val EVENT_FILE_NAME = "events.json"
 
 
 /**
@@ -58,7 +77,7 @@ const val FILE_NAME = "locations.json"
  * @param context [Context] to open a file.
  * @param fileName File name to use.
  */
-fun createFile(context: Context, fileName: String = FILE_NAME) {
+fun createFile(context: Context, fileName: String = LOCATION_FILE_NAME) {
     try {
         val bufferedWriter = BufferedWriter(FileWriter(File(context.filesDir, fileName)))
         bufferedWriter.write("")
@@ -75,9 +94,9 @@ fun createFile(context: Context, fileName: String = FILE_NAME) {
  * @param fileName File name to use.
  * @return String of read data.
  */
-fun readFile(context: Context, fileName: String = FILE_NAME): String {
+fun readFile(context: Context, fileName: String = LOCATION_FILE_NAME): String {
     var inputStream: InputStream? = null
-    var locationsString = ""
+    var outString = ""
     try {
         inputStream = context.openFileInput(fileName)
         // Read data from JSON file.
@@ -87,9 +106,9 @@ fun readFile(context: Context, fileName: String = FILE_NAME): String {
         while (bufferedReader.readLine().also { receiveString = it } != null) {
             stringBuilder.append(receiveString)
         }
-        locationsString = stringBuilder.toString()
+        outString = stringBuilder.toString()
     } catch (e: FileNotFoundException) {
-        createFile(context)
+        createFile(context, fileName)
     } catch (e: IOException) {
         Log.e("JSON Helper - readFile()", "Can not read file: $e")
     } finally {
@@ -99,7 +118,7 @@ fun readFile(context: Context, fileName: String = FILE_NAME): String {
             e.printStackTrace()
         }
     }
-    return locationsString
+    return outString
 }
 
 /**
@@ -110,7 +129,7 @@ fun readFile(context: Context, fileName: String = FILE_NAME): String {
  * @param fileName File name to use.
  * @return true if no Exception was thrown, false else.
  */
-fun writeFile(context: Context, data: String, fileName: String = FILE_NAME): Boolean {
+fun writeFile(context: Context, data: String, fileName: String = LOCATION_FILE_NAME): Boolean {
     try {
         val bufferedWriter = BufferedWriter(FileWriter(File(context.filesDir, fileName)))
         bufferedWriter.write(data)
@@ -152,7 +171,7 @@ fun insertLocation(context: Context, name: String, gps: GPS): UserLocations? {
  * @param id String of UUID of the location to be removed.
  * @return Updated UserLocations object, could be empty.
  */
-fun deleteLocation(context: Context, id: String): UserLocations? {
+fun deleteLocationDB(context: Context, id: String): UserLocations? {
     val locationsObject: UserLocations = getLocations(context)
     try {
         locationsObject.locations.removeAll { it.id == id }
@@ -198,7 +217,7 @@ fun updateLocation(context: Context, id: String, newName: String): UserLocations
 fun getLocations(context: Context): UserLocations {
     var locationsObject = UserLocations(mutableListOf())
     try {
-        val data = readFile(context)
+        val data = readFile(context, LOCATION_FILE_NAME)
         // If the JSON file has already some data, load them.
         if (data.isNotEmpty()) {
             locationsObject = Json.decodeFromString(data)
@@ -207,4 +226,91 @@ fun getLocations(context: Context): UserLocations {
         Log.e("JSON Helper - getLocations()", "Something went wrong.")
     }
     return locationsObject
+}
+
+/**
+ * Function to add a new event into the list of events.
+ *
+ * @param context [Context] to open a file.
+ * @param name Name of the new event.
+ * @param gps [GPS] value of the new event.
+ * @return Updated list of user's events.
+ */
+fun insertEvent(context: Context, name: String, gps: GPS): LocationEvents? {
+    val eventsObject = getEvents(context)
+    try {
+        val newEvent = Event(createUUID(), name, gps)
+        eventsObject.events.add(newEvent)
+
+        val locationsJson = Json.encodeToString(eventsObject)
+        writeFile(context, locationsJson)
+    } catch (e: Exception) {
+        Log.e("JSON Helper - insertLocation()", "Something went wrong.")
+        return null
+    }
+    return eventsObject
+}
+
+/**
+ * Remove certain location specified by the id parameter.
+ *
+ * @param context Context to open a file.
+ * @param id String of UUID of the location to be removed.
+ * @return Updated UserLocations object, could be empty.
+ */
+fun deleteEvent(context: Context, id: String): LocationEvents? {
+    val eventObject: LocationEvents = getEvents(context)
+    try {
+        eventObject.events.removeAll { it.id == id }
+
+        val eventsJson = Json.encodeToString(eventObject)
+        writeFile(context, eventsJson)
+    } catch (e: Exception) {
+        Log.e("JSON Helper - deleteEvent()", "Something went wrong.")
+        return null
+    }
+    return eventObject
+}
+
+/**
+ * Update certain location specified by the id parameter.
+ * Only the location's name is supported for now.
+ * If no location with specified id exists, nothing happens and original object is returned.
+ *
+ * @param context Context to open a file.
+ * @param id String of UUID of the location to be updated.
+ * @param newName New name of the location.
+ * @return Updated UserLocations object, could be empty.
+ */
+fun updateEvent(context: Context, id: String, newName: String): LocationEvents {
+    val eventObject: LocationEvents = getEvents(context)
+    try {
+        eventObject.events.find { it.id == id }?.name = newName
+
+        val eventsJson = Json.encodeToString(eventObject)
+        writeFile(context, eventsJson)
+    } catch (e: Exception) {
+        Log.e("JSON Helper - updateEvent()", "Something went wrong.")
+    }
+    return eventObject
+}
+
+/**
+ * Helper function to get object of UserLocations.
+ *
+ * @param context Context to open a file.
+ * @return UserLocations object, could be empty.
+ */
+fun getEvents(context: Context): LocationEvents {
+    var eventsObject = LocationEvents(mutableListOf())
+    try {
+        val data = readFile(context, EVENT_FILE_NAME)
+        // If the JSON file has already some data, load them.
+        if (data.isNotEmpty()) {
+            eventsObject = Json.decodeFromString(data)
+        }
+    } catch (e: Exception) {
+        Log.e("JSON Helper - getEvents()", "Something went wrong.")
+    }
+    return eventsObject
 }

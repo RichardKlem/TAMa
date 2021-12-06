@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tama.R
 import com.example.tama.databinding.FragmentLocationBinding
-import com.example.tama.ui.events.EventsViewModel
 import kotlinx.android.synthetic.main.fragment_location.*
 
 class LocationFragment : Fragment() {
@@ -48,6 +47,7 @@ class LocationFragment : Fragment() {
             val locationName = getString(R.string.placeholder_location_name)
             if (locationName.isNotEmpty()) {
                 val location = Location(locationName)
+//                locationAdapter.addLocation(view.context, location)
                 locationAdapter.addLocation(location)
             }
         }
