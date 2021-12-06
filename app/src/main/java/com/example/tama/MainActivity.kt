@@ -3,7 +3,6 @@ package com.example.tama
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -15,14 +14,12 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.tama.databinding.ActivityMainBinding
-import com.example.tama.ui.settings.SettingsAdapter
 import com.example.tama.ui.events.EventsFragment
-import com.example.tama.ui.home.MapsFragment
 import com.example.tama.ui.locations.LocationFragment
 import com.example.tama.ui.settings.SettingsFragment
 import com.example.tama.worker.NotificationWorker
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_settings.*
+import kotlinx.android.synthetic.main.fragment_location.*
 import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
@@ -32,7 +29,6 @@ class MainActivity : AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
     private val eventFragment = EventsFragment()
     private val locationFragment = LocationFragment()
-    private val mapFragment = MapsFragment()
     private val settingsFragment = SettingsFragment()
     private var activeFragment: Fragment = locationFragment
 
@@ -58,9 +54,8 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
         fragmentManager.beginTransaction().apply {
-            add(R.id.container, locationFragment, getString(R.string.title_events))//.hide(locationFragment)
+            add(R.id.container, locationFragment, getString(R.string.title_events))
             add(R.id.container, eventFragment, getString(R.string.title_locations)).hide(eventFragment)
-            add(R.id.container, mapFragment, getString(R.string.title_map)).hide(mapFragment)
             add(R.id.container, settingsFragment, getString(R.string.settings)).hide(settingsFragment)
         }.commit()
         initListeners()
@@ -79,8 +74,12 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.goto_settings) {
+//            fragmentManager.beginTransaction().replace(activeFragment.id, settingsFragment)
+//            fragmentManager.beginTransaction().addToBackStack(null)
+//            fragmentManager.beginTransaction().commit()
             fragmentManager.beginTransaction().hide(activeFragment).show(settingsFragment).commit()
             activeFragment = settingsFragment
+            btnAddLocation.hide()
             return true
         }
         return super.onOptionsItemSelected(item)
@@ -90,20 +89,22 @@ class MainActivity : AppCompatActivity() {
         nav_view.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.navigation_events -> {
+//                    fragmentManager.beginTransaction().replace(activeFragment.id, eventFragment)
+//                    fragmentManager.beginTransaction().addToBackStack(null)
+//                    fragmentManager.beginTransaction().commit()
                     fragmentManager.beginTransaction().hide(activeFragment).show(eventFragment).commit()
                     activeFragment = eventFragment
+                    btnAddLocation.hide()
                     true
                 }
 
                 R.id.navigation_dashboard -> {
+//                    fragmentManager.beginTransaction().replace(activeFragment.id, locationFragment)
+//                    fragmentManager.beginTransaction().addToBackStack(null)
+//                    fragmentManager.beginTransaction().commit()
                     fragmentManager.beginTransaction().hide(activeFragment).show(locationFragment).commit()
                     activeFragment = locationFragment
-                    true
-                }
-
-                R.id.mapsFragment -> {
-                    fragmentManager.beginTransaction().hide(activeFragment).show(mapFragment).commit()
-                    activeFragment = mapFragment
+                    btnAddLocation.show()
                     true
                 }
 
