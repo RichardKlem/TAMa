@@ -38,6 +38,7 @@ class LocationFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         locationAdapter = LocationAdapter(mutableListOf())
+        locationAdapter.loadLocations(requireContext())
 
         rvLocationItems.adapter = locationAdapter
         rvLocationItems.layoutManager = LinearLayoutManager(this.context)
