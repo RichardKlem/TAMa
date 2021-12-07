@@ -10,6 +10,11 @@ import kotlinx.serialization.json.Json
 import java.io.*
 import java.util.*
 
+
+/**____________________________________
+ * ______ LOCATION DATA CLASSES _______
+ * ____________________________________ */
+
 /**
  * Data class of GPS value of user selected location.
  * No check is done, provided values should be valid.
@@ -20,15 +25,50 @@ import java.util.*
 @Serializable
 data class GPS(val lat: Double, val long: Double)
 
+
+/**
+ * Data class of sub-location. An element of the list of sub-locations in the selected area.
+ *
+ * @property technicalName Geo package defined name of the location.
+ */
+@Serializable
+data class SubLocation(var technicalName: String)
+
 /**
  * Data class of user selected location.
  *
  * @property id Generated [UUID].
- * @property name User defined or geo package defined name of the location.
+ * @property technicalName Geo package defined name of the location.
+ * @property userNaming Name which can be changed by user. Default is shorten [technicalName].
  * @property gps [GPS] value of the location.
+ * @property radius Value of the location area, zero means only one street.
+ * @property listOfSubLocations List of [SubLocation] objects. If the location is an area then more
+ *           then one value will be present, else (the location is only one street) then there will
+ *           be only one element.
  */
 @Serializable
-data class Location(val id: String, var name: String, val gps: GPS)
+data class Location(
+    val id: String,
+    val technicalName: String,
+    var userNaming: String,
+    val gps: GPS,
+    val radius: Int,
+    val listOfSubLocations: List<SubLocation>
+)
+
+/**
+ * Data class wrapping the list of user defined locations.
+ * Can be initialized with empty list. This is also valid and useful.
+ *
+ * @property locations List of locations.
+ */
+@Serializable
+data class UserLocations(val locations: MutableList<Location>)
+
+
+/**____________________________________
+ * _______ EVENTS DATA CLASSES ________
+ * ____________________________________ */
 
 /**
  * Data class of user cleaning event.
@@ -40,14 +80,6 @@ data class Location(val id: String, var name: String, val gps: GPS)
 @Serializable
 data class Event(val id: String, var name: String, val gps: GPS)
 
-/**
- * Data class wrapping the list of user defined locations.
- * Can be initialized with empty list. This is also valid and useful.
- *
- * @property locations List of locations.
- */
-@Serializable
-data class UserLocations(val locations: MutableList<Location>)
 
 /**
  * Data class wrapping the list of user defined locations.
@@ -57,6 +89,11 @@ data class UserLocations(val locations: MutableList<Location>)
  */
 @Serializable
 data class LocationEvents(val events: MutableList<Event>)
+
+
+/**____________________________________
+ * ________ GENERAL FUNCTIONS _________
+ * ____________________________________ */
 
 /**
  * Function to generate [UUID].
@@ -141,18 +178,29 @@ fun writeFile(context: Context, data: String, fileName: String = LOCATION_FILE_N
     return true
 }
 
+
+/**____________________________________
+ * __ LOCATION MANIPULATION FUNCTIONS _
+ * ____________________________________ */
+
 /**
  * Function to add a new location into the list of locations.
+ * Parameters are in fact the same the [Location] constructor takes.
  *
  * @param context [Context] to open a file.
- * @param name Name of the new location.
- * @param gps [GPS] value of the new location.
+ * @param technicalName Name of the new location.
+ * @property userNaming Name which can be changed by user. Default is shorten [technicalName].
+ * @property gps [GPS] value of the location.
+ * @property radius Value of the location area, zero means only one street.
+ * @property subLocations List of [SubLocation] objects. If the location is an area then more
+ *           then one value will be present, else (the location is only one street) then there will
+ *           be only one element.
  * @return Updated list of user's locations.
  */
-fun insertLocation(context: Context, name: String, gps: GPS): UserLocations? {
+fun insertLocation(context: Context, technicalName: String, userNaming: String, gps: GPS, radius: Int, subLocations: List<SubLocation>): UserLocations? {
     val locationsObject = getLocations(context)
     try {
-        val newLocation = Location(createUUID(), name, gps)
+        val newLocation = Location(createUUID(), technicalName, userNaming, gps, radius, subLocations)
         locationsObject.locations.add(newLocation)
 
         val locationsJson = Json.encodeToString(locationsObject)
@@ -192,13 +240,13 @@ fun deleteLocationDB(context: Context, id: String): UserLocations? {
  *
  * @param context Context to open a file.
  * @param id String of UUID of the location to be updated.
- * @param newName New name of the location.
+ * @param newName New user naming of the location.
  * @return Updated UserLocations object, could be empty.
  */
 fun updateLocation(context: Context, id: String, newName: String): UserLocations {
     val locationsObject: UserLocations = getLocations(context)
     try {
-        locationsObject.locations.find { it.id == id }?.name = newName
+        locationsObject.locations.find { it.id == id }?.userNaming = newName
 
         val locationsJson = Json.encodeToString(locationsObject)
         writeFile(context, locationsJson)
@@ -227,6 +275,11 @@ fun getLocations(context: Context): UserLocations {
     }
     return locationsObject
 }
+
+
+/**____________________________________
+ * __ EVENTS MANIPULATION FUNCTIONS ___
+ * ____________________________________ */
 
 /**
  * Function to add a new event into the list of events.
