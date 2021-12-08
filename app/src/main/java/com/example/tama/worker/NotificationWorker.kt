@@ -44,7 +44,7 @@ class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
         editor.edit().putLong("dnd", newDnd.time.time).apply()
 
 
-        DataFetcher.fetchData(this.applicationContext, "${dateFormat.format(currentDate)}T00:00:00.000Z", "${dateFormat.format(endDate)}T20:59:59.999Z") { cleaning: List<Cleaning> ->
+        DataFetcher.fetchData(this.applicationContext, "${dateFormat.format(currentDate)}T00:00:00.000Z", "${dateFormat.format(endDate)}T20:59:59.999Z", { cleaning: List<Cleaning> ->
             val intent = Intent(this.applicationContext, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
@@ -86,7 +86,7 @@ class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
                     }
                 }
             }
-        }
+        }, {})
 
         return Result.success()
     }
