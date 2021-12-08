@@ -1,14 +1,10 @@
 package com.example.tama.ui.locations
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tama.R
-import com.example.tama.helpers.GPS
-import com.example.tama.helpers.deleteLocationDB
-import com.example.tama.helpers.insertLocation
 import kotlinx.android.synthetic.main.location_on_main.view.*
 
 class LocationAdapter(
@@ -17,13 +13,9 @@ class LocationAdapter(
 
     class LocationViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-//    fun addLocation(context: Context, location: Location) {
     fun addLocation(location: Location) {
         locations.add(location)
         notifyItemInserted(locations.size - 1)
-
-//        val mockGPS = GPS(.0, .0)
-//        insertLocation(context, location.title, mockGPS)
     }
 
     private fun deleteLocation(position: Int) {
