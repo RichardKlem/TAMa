@@ -22,6 +22,12 @@ import java.util.*
 class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, params) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
+        val off = this.applicationContext.getSharedPreferences("notifications-off", Context.MODE_PRIVATE).getBoolean("notifications-off", false)
+
+        if (off) {
+            return Result.success()
+        }
+
         val currentDate = Calendar.getInstance().time
         val c = Calendar.getInstance()
         c.add(Calendar.DATE, 1);
