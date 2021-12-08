@@ -67,10 +67,6 @@ class MainActivity : AppCompatActivity() {
         val notificationWorkerRequest = PeriodicWorkRequestBuilder<NotificationWorker>(2, TimeUnit.HOURS).build()
         WorkManager.getInstance(applicationContext).enqueue(notificationWorkerRequest)
 
-        // set streets fetcher worker
-        val streetsFetcherWorkerRequest = PeriodicWorkRequestBuilder<StreetsFetcherWorker>(30, TimeUnit.DAYS).build()
-        WorkManager.getInstance(applicationContext).enqueue(streetsFetcherWorkerRequest)
-
         // set events fetcher worker
         val eventsFetcherWorkerRequest = PeriodicWorkRequestBuilder<EventFetcherWorker>(2, TimeUnit.HOURS).build();
         WorkManager.getInstance(applicationContext).enqueue(eventsFetcherWorkerRequest)

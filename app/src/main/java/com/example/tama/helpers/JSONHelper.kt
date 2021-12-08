@@ -78,7 +78,7 @@ data class UserLocations(val locations: MutableList<Location>)
  * @property gps [GPS] value of the event.
  */
 @Serializable
-data class Event(val id: String, var name: String, val gps: GPS)
+data class Event(val id: String, var name: String, val gps: GPS, val from: String, val to: String)
 
 
 /**
@@ -289,10 +289,10 @@ fun getLocations(context: Context): UserLocations {
  * @param gps [GPS] value of the new event.
  * @return Updated list of user's events.
  */
-fun insertEvent(context: Context, name: String, gps: GPS): LocationEvents? {
+fun insertEvent(context: Context, name: String, gps: GPS, from: String, to: String): LocationEvents? {
     val eventsObject = getEvents(context)
     try {
-        val newEvent = Event(createUUID(), name, gps)
+        val newEvent = Event(createUUID(), name, gps, from, to)
         eventsObject.events.add(newEvent)
 
         val locationsJson = Json.encodeToString(eventsObject)
