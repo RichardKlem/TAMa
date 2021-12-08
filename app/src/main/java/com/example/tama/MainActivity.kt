@@ -17,6 +17,8 @@ import com.example.tama.databinding.ActivityMainBinding
 import com.example.tama.ui.events.EventsFragment
 import com.example.tama.ui.locations.LocationFragment
 import com.example.tama.ui.settings.SettingsFragment
+import com.example.tama.worker.EventFetcherWorker
+import com.example.tama.worker.StreetsFetcherWorker
 import com.example.tama.worker.NotificationWorker
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -67,9 +69,12 @@ class MainActivity : AppCompatActivity() {
         nav_view.itemIconTintList = null
 
         // set notification worker
-        val workerRequest =
-            PeriodicWorkRequestBuilder<NotificationWorker>(2, TimeUnit.HOURS).build()
-        WorkManager.getInstance(applicationContext).enqueue(workerRequest)
+        val notificationWorkerRequest = PeriodicWorkRequestBuilder<NotificationWorker>(2, TimeUnit.HOURS).build()
+        WorkManager.getInstance(applicationContext).enqueue(notificationWorkerRequest)
+
+        // set events fetcher worker
+        val eventsFetcherWorkerRequest = PeriodicWorkRequestBuilder<EventFetcherWorker>(2, TimeUnit.HOURS).build();
+        WorkManager.getInstance(applicationContext).enqueue(eventsFetcherWorkerRequest)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
