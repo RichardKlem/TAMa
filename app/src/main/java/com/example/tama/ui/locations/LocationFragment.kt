@@ -1,16 +1,15 @@
 package com.example.tama.ui.locations
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.tama.R
 import com.example.tama.databinding.FragmentLocationBinding
+import com.example.tama.helpers.*
 import kotlinx.android.synthetic.main.fragment_location.*
 
 class LocationFragment : Fragment() {
@@ -43,15 +42,20 @@ class LocationFragment : Fragment() {
         rvLocationItems.adapter = locationAdapter
         rvLocationItems.layoutManager = LinearLayoutManager(this.context)
 
+        // This is for mocked data. Once we have map integrated, then no need of that.
+        var cnt = 0
         btnAddLocation.setOnClickListener {
-            val locationName = getString(R.string.placeholder_location_name)
-            if (locationName.isNotEmpty()) {
-                val location = Location(locationName)
-//                locationAdapter.addLocation(view.context, location)
-                locationAdapter.addLocation(location)
-            }
+            val locationName = if (cnt % 2 == 1) getString(R.string.placeholder_location_name) else getString(R.string.placeholder_location_name) + "-- area"
+            val subLocations = if ( cnt % 2 == 1) listOf(SubLocation(locationName)) else  listOf(SubLocation(locationName + "1"), SubLocation(locationName + "1"))
+            cnt++
+            insertLocation(requireContext(),
+                locationName,
+                locationName,
+                GPS(50.0, 14.0),
+                0,
+                subLocations)
+            locationAdapter.loadLocations(requireContext())
         }
-
     }
 
     override fun onDestroyView() {

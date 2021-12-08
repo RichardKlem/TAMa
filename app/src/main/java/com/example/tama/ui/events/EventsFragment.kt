@@ -9,10 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tama.R
 import com.example.tama.databinding.FragmentEventsBinding
-import com.example.tama.ui.locations.Location
-import com.example.tama.ui.locations.LocationAdapter
 import kotlinx.android.synthetic.main.fragment_events.*
-import kotlinx.android.synthetic.main.fragment_location.*
 
 class EventsFragment : Fragment() {
 
