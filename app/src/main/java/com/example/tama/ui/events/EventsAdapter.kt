@@ -1,5 +1,6 @@
 package com.example.tama.ui.events
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,6 +38,7 @@ class EventsAdapter(
         val curLocation = events[position]
         holder.itemView.apply {
             tvEvent.text = curLocation.title
+            clEvent.setBackgroundColor(Color.RED)
         }
     }
 

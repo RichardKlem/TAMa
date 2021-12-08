@@ -18,7 +18,7 @@ import java.util.*
 class DataFetcher {
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
-        fun fetchData(context: Context, from: String, to: String, callback: (List<Cleaning>) -> Unit) {
+        fun fetchData(context: Context, from: String, to: String, callback: (List<Cleaning>) -> Unit ) {
             val streets = mutableListOf<Street>()
             val cleanings = mutableListOf<Cleaning>()
 
