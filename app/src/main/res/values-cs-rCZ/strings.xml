@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Blokové čištění Brno</string>
+    <string name="title_home">Domov</string>
+    <string name="title_events">Aktuální čištění</string>
+    <string name="title_map">Mapa</string>
+    <string name="title_locations">Oblast</string>
+    <string name="add_location">Přidej oblast</string>
+    <string name="delete_location">Vymaž oblast</string>
+    <string name="settings">Nastavení</string>
+    <string name="event">Aktuální čištění</string>
+    <string name="language">Jazyk</string>
+</resources>

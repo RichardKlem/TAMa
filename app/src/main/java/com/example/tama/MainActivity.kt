@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
     private val eventFragment = EventsFragment()
     private val locationFragment = LocationFragment()
-    private val settingsFragment = SettingsFragment()
     private var activeFragment: Fragment = locationFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +57,6 @@ class MainActivity : AppCompatActivity() {
         fragmentManager.beginTransaction().apply {
             add(R.id.container, locationFragment, getString(R.string.title_events))
             add(R.id.container, eventFragment, getString(R.string.title_locations)).hide(eventFragment)
-            add(R.id.container, settingsFragment, getString(R.string.settings)).hide(settingsFragment)
         }.commit()
         initListeners()
         nav_view.itemIconTintList = null
