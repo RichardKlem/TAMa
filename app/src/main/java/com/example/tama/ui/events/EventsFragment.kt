@@ -10,8 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tama.R
-import com.example.tama.data.entity.Cleaning
-import com.example.tama.data.fetch.DataFetcher
 import com.example.tama.databinding.FragmentEventsBinding
 import kotlinx.android.synthetic.main.fragment_events.*
 
