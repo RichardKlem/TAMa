@@ -10,4 +10,8 @@
     <string name="settings">Nastavení</string>
     <string name="event">Aktuální čištění</string>
     <string name="language">Jazyk</string>
+    <string name="messages_header">Zprávy</string>
+    <string name="sync_header">Synchronizace</string>
+    <string name="signature_title">Váš podpis</string>
+    <string name="reply_title">Předvolená odpověď</string>
 </resources>
