@@ -25,7 +25,6 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.home -> {

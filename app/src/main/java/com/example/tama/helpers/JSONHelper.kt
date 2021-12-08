@@ -296,7 +296,7 @@ fun insertEvent(context: Context, name: String, gps: GPS, from: String, to: Stri
         eventsObject.events.add(newEvent)
 
         val locationsJson = Json.encodeToString(eventsObject)
-        writeFile(context, locationsJson)
+        writeFile(context, locationsJson, EVENT_FILE_NAME)
     } catch (e: Exception) {
         Log.e("JSON Helper - insertLocation()", "Something went wrong.")
         return null
