@@ -9,7 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tama.R
 import com.example.tama.databinding.FragmentLocationBinding
-import com.example.tama.helpers.*
+import com.example.tama.helpers.GPS
+import com.example.tama.helpers.SubLocation
+import com.example.tama.helpers.insertLocation
 import kotlinx.android.synthetic.main.fragment_location.*
 
 class LocationFragment : Fragment() {
@@ -46,15 +48,20 @@ class LocationFragment : Fragment() {
         // This is for mocked data. Once we have map integrated, then no need of that.
         var cnt = 0
         btnAddLocation.setOnClickListener {
-            val locationName = if (cnt % 2 == 1) getString(R.string.placeholder_location_name) else getString(R.string.placeholder_location_name) + "-- area"
-            val subLocations = if ( cnt % 2 == 1) listOf(SubLocation(locationName)) else  listOf(SubLocation(locationName + "1"), SubLocation(locationName + "1"))
+            val locationName =
+                if (cnt % 2 == 1) getString(R.string.placeholder_location_name) else getString(R.string.placeholder_location_name) + "-- area"
+            val subLocations = if (cnt % 2 == 1) listOf(SubLocation(locationName)) else listOf(
+                SubLocation(locationName + "1"), SubLocation(locationName + "2")
+            )
             cnt++
-            insertLocation(requireContext(),
+            insertLocation(
+                requireContext(),
                 locationName,
                 locationName,
                 GPS(50.0, 14.0),
                 0,
-                subLocations)
+                subLocations
+            )
             locationAdapter.loadLocations(requireContext())
         }
     }

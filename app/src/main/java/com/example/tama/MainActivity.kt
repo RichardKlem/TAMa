@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,11 +13,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.tama.databinding.ActivityMainBinding
-import com.example.tama.ui.events.EventsFragment
-import com.example.tama.ui.locations.LocationFragment
-import com.example.tama.ui.settings.SettingsFragment
 import com.example.tama.worker.EventFetcherWorker
-import com.example.tama.worker.StreetsFetcherWorker
 import com.example.tama.worker.NotificationWorker
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,14 +22,6 @@ import java.util.concurrent.TimeUnit
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    private val fragmentManager = supportFragmentManager
-    private lateinit var eventFragment: EventsFragment
-    private lateinit var locationFragment: LocationFragment
-
-    //    private lateinit var settingsFragment: SettingsFragment
-    private val settingsFragment = SettingsFragment()
-    private lateinit var activeFragment: Fragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,22 +45,16 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-
-//        fragmentManager.beginTransaction().apply {
-//            add(R.id.container, locationFragment, getString(R.string.title_events))
-//            add(R.id.container, eventFragment, getString(R.string.title_locations)).hide(eventFragment)
-//            add(R.id.container, settingsFragment, getString(R.string.settings)).hide(settingsFragment)
-//        }.commit()
-        println("MAIN BEFORE")
-//        initListeners()
         nav_view.itemIconTintList = null
 
         // set notification worker
-        val notificationWorkerRequest = PeriodicWorkRequestBuilder<NotificationWorker>(2, TimeUnit.HOURS).build()
+        val notificationWorkerRequest =
+            PeriodicWorkRequestBuilder<NotificationWorker>(2, TimeUnit.HOURS).build()
         WorkManager.getInstance(applicationContext).enqueue(notificationWorkerRequest)
 
         // set events fetcher worker
-        val eventsFetcherWorkerRequest = PeriodicWorkRequestBuilder<EventFetcherWorker>(2, TimeUnit.HOURS).build();
+        val eventsFetcherWorkerRequest =
+            PeriodicWorkRequestBuilder<EventFetcherWorker>(2, TimeUnit.HOURS).build()
         WorkManager.getInstance(applicationContext).enqueue(eventsFetcherWorkerRequest)
     }
 
@@ -85,45 +66,10 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         if (id == R.id.goto_settings) {
-////            fragmentManager.beginTransaction().replace(activeFragment.id, settingsFragment)
-////            fragmentManager.beginTransaction().addToBackStack(null)
-////            fragmentManager.beginTransaction().commit()
-//            fragmentManager.beginTransaction().hide(activeFragment).show(settingsFragment).commit()
-//            activeFragment = settingsFragment
-//            btnAddLocation.hide()
-//            return true
             val switchActivityIntent = Intent(this, SettingsActivity::class.java)
             startActivity(switchActivityIntent)
         }
 
         return super.onOptionsItemSelected(item)
     }
-
-//    private fun initListeners() {
-//        nav_view.setOnItemSelectedListener { menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.navigation_events -> {
-////                    fragmentManager.beginTransaction().replace(activeFragment.id, eventFragment)
-////                    fragmentManager.beginTransaction().addToBackStack(null)
-////                    fragmentManager.beginTransaction().commit()
-//                    fragmentManager.beginTransaction().hide(activeFragment).show(eventFragment).commit()
-//                    activeFragment = eventFragment
-//                    btnAddLocation.hide()
-//                    true
-//                }
-//
-//                R.id.navigation_dashboard -> {
-////                    fragmentManager.beginTransaction().replace(activeFragment.id, locationFragment)
-////                    fragmentManager.beginTransaction().addToBackStack(null)
-////                    fragmentManager.beginTransaction().commit()
-//                    fragmentManager.beginTransaction().hide(activeFragment).show(locationFragment).commit()
-//                    activeFragment = locationFragment
-//                    btnAddLocation.show()
-//                    true
-//                }
-//
-//                else -> false
-//            }
-//        }
-//    }
 }
