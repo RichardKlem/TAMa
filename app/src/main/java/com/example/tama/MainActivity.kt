@@ -2,6 +2,7 @@ package com.example.tama
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.tama.databinding.ActivityMainBinding
+import com.example.tama.helpers.getEvents
 import com.example.tama.worker.EventFetcherWorker
 import com.example.tama.worker.NotificationWorker
 import com.google.android.material.bottomnavigation.BottomNavigationView

@@ -21,8 +21,8 @@ class EventFetcherWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
     override fun doWork(): Result {
         val currentDate = Calendar.getInstance().time
         val c = Calendar.getInstance()
-        c.add(Calendar.DATE, 1);
-        val endDate = c.time;
+        c.add(Calendar.DATE, 1)
+        val endDate = c.time
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
         DataFetcher.fetchData(this.applicationContext, "${dateFormat.format(currentDate)}T00:00:00.000Z", "${dateFormat.format(endDate)}T20:59:59.999Z",
