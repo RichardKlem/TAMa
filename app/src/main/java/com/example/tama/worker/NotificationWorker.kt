@@ -12,9 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.tama.MainActivity
-import com.example.tama.R
 import com.example.tama.data.entity.Cleaning
-import com.example.tama.data.entity.Street
 import com.example.tama.data.fetch.DataFetcher
 import java.text.SimpleDateFormat
 import java.util.*
