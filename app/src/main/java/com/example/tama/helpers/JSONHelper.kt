@@ -114,7 +114,7 @@ const val EVENT_FILE_NAME = "events.json"
  * @param context [Context] to open a file.
  * @param fileName File name to use.
  */
-fun createFile(context: Context, fileName: String = LOCATION_FILE_NAME) {
+fun createFile(context: Context, fileName: String) {
     try {
         val bufferedWriter = BufferedWriter(FileWriter(File(context.filesDir, fileName)))
         bufferedWriter.write("")
@@ -131,7 +131,7 @@ fun createFile(context: Context, fileName: String = LOCATION_FILE_NAME) {
  * @param fileName File name to use.
  * @return String of read data.
  */
-fun readFile(context: Context, fileName: String = LOCATION_FILE_NAME): String {
+fun readFile(context: Context, fileName: String): String {
     var inputStream: InputStream? = null
     var outString = ""
     try {
@@ -166,7 +166,7 @@ fun readFile(context: Context, fileName: String = LOCATION_FILE_NAME): String {
  * @param fileName File name to use.
  * @return true if no Exception was thrown, false else.
  */
-fun writeFile(context: Context, data: String, fileName: String = LOCATION_FILE_NAME): Boolean {
+fun writeFile(context: Context, data: String, fileName: String): Boolean {
     try {
         val bufferedWriter = BufferedWriter(FileWriter(File(context.filesDir, fileName)))
         bufferedWriter.write(data)
@@ -204,7 +204,7 @@ fun insertLocation(context: Context, technicalName: String, userNaming: String, 
         locationsObject.locations.add(newLocation)
 
         val locationsJson = Json.encodeToString(locationsObject)
-        writeFile(context, locationsJson)
+        writeFile(context, locationsJson, LOCATION_FILE_NAME)
     } catch (e: Exception) {
         Log.e("JSON Helper - insertLocation()", "Something went wrong.")
         return null
@@ -225,7 +225,7 @@ fun deleteLocationDB(context: Context, id: String): UserLocations? {
         locationsObject.locations.removeAll { it.id == id }
 
         val locationsJson = Json.encodeToString(locationsObject)
-        writeFile(context, locationsJson)
+        writeFile(context, locationsJson, LOCATION_FILE_NAME)
     } catch (e: Exception) {
         Log.e("JSON Helper - deleteLocation()", "Something went wrong.")
         return null
@@ -249,7 +249,7 @@ fun updateLocation(context: Context, id: String, newName: String): UserLocations
         locationsObject.locations.find { it.id == id }?.userNaming = newName
 
         val locationsJson = Json.encodeToString(locationsObject)
-        writeFile(context, locationsJson)
+        writeFile(context, locationsJson, LOCATION_FILE_NAME)
     } catch (e: Exception) {
         Log.e("JSON Helper - updateLocation()", "Something went wrong.")
     }
@@ -317,7 +317,7 @@ fun deleteEvent(context: Context, id: String): LocationEvents? {
         eventObject.events.removeAll { it.id == id }
 
         val eventsJson = Json.encodeToString(eventObject)
-        writeFile(context, eventsJson)
+        writeFile(context, eventsJson, EVENT_FILE_NAME)
     } catch (e: Exception) {
         Log.e("JSON Helper - deleteEvent()", "Something went wrong.")
         return null
@@ -341,7 +341,7 @@ fun updateEvent(context: Context, id: String, newName: String): LocationEvents {
         eventObject.events.find { it.id == id }?.name = newName
 
         val eventsJson = Json.encodeToString(eventObject)
-        writeFile(context, eventsJson)
+        writeFile(context, eventsJson, EVENT_FILE_NAME)
     } catch (e: Exception) {
         Log.e("JSON Helper - updateEvent()", "Something went wrong.")
     }
