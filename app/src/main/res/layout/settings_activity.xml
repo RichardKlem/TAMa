@@ -6,23 +6,23 @@
     android:layout_height="match_parent"
     android:id="@+id/settings">
 
-    <Spinner
-        android:id="@+id/spLanguage"
-        android:layout_width="408dp"
-        android:layout_height="70dp"
-        android:layout_marginBottom="128dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="SpeakableTextPresentCheck" />
+<!--    <Spinner-->
+<!--        android:id="@+id/spLanguage"-->
+<!--        android:layout_width="408dp"-->
+<!--        android:layout_height="70dp"-->
+<!--        android:layout_marginBottom="128dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        tools:ignore="SpeakableTextPresentCheck" />-->
 
-    <TextView
-        android:id="@+id/tvLanguage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/language"
-        app:layout_constraintBottom_toTopOf="@+id/spLanguage"
-        app:layout_constraintStart_toStartOf="parent" />
+<!--    <TextView-->
+<!--        android:id="@+id/tvLanguage"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/language"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/spLanguage"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

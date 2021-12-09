@@ -8,26 +8,22 @@
     <string name="delete_location">Delete Location</string>
     <string name="settings">Settings</string>
     <string name="event">Event</string>
+    <string name="enable_notif">Enable Notifications</string>
     <string name="date" translatable="false">24.12.</string>
     <string name="date_early" translatable="false">8.12.</string>
     <string name="time" translatable="false">8:00 – 12:00</string>
     <string name="startTime" translatable="false">8:00</string>
     <string name="endTime" translatable="false">13:00</string>
-    <string name="language">Language</string>
     <string name="placeholder_location_name" translatable="false">Božetěchova</string>
 
     <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
+    <string name="notifications">Notifications</string>
+    <string name="language">Language</string>
 
     <!-- Messages Preferences -->
     <string name="signature_title">Your signature</string>
     <string name="reply_title">Default reply action</string>
 
     <!-- Sync Preferences -->
-    <string name="sync_title" translatable="false">Sync email periodically</string>
-    <string name="attachment_title" translatable="false">Download incoming attachments</string>
-    <string name="attachment_summary_on" translatable="false">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off" translatable="false">Only download attachments when manually requested</string>
+    <string name="select_language">Select Language</string>
 </resources>

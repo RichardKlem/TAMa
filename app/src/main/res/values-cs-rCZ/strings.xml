@@ -14,4 +14,7 @@
     <string name="sync_header">Synchronizace</string>
     <string name="signature_title">Váš podpis</string>
     <string name="reply_title">Předvolená odpověď</string>
+    <string name="notifications">Upozornění</string>
+    <string name="enable_notif">Povolit Upozornění</string>
+    <string name="select_language">Vyberte jazyk</string>
 </resources>
