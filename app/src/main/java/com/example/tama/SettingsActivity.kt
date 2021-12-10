@@ -45,8 +45,7 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
                         is SwitchPreferenceCompat -> {
                             if (preference.key == "enable_notif") {
                                 context!!.getSharedPreferences("enable_notif", Context.MODE_PRIVATE)
-                                    .edit().putBoolean("enable_notif", true).apply()
-                                Log.d("Test", "${preference.key} : ${preference.isChecked}")
+                                    .edit().putBoolean("enable_notif", preference.isChecked).apply()
                             }
                         }
                     }
