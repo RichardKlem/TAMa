@@ -12,9 +12,7 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.tama.MainActivity
-import com.example.tama.R
 import com.example.tama.data.entity.Cleaning
-import com.example.tama.data.entity.Street
 import com.example.tama.data.fetch.DataFetcher
 import java.text.SimpleDateFormat
 import java.util.*
@@ -22,6 +20,12 @@ import java.util.*
 class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, params) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
+        val off = this.applicationContext.getSharedPreferences("notifications-off", Context.MODE_PRIVATE).getBoolean("notifications-off", false)
+
+        if (off) {
+            return Result.success()
+        }
+
         val currentDate = Calendar.getInstance().time
         val c = Calendar.getInstance()
         c.add(Calendar.DATE, 1);
@@ -44,7 +48,7 @@ class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
         editor.edit().putLong("dnd", newDnd.time.time).apply()
 
 
-        DataFetcher.fetchData(this.applicationContext, "${dateFormat.format(currentDate)}T00:00:00.000Z", "${dateFormat.format(endDate)}T20:59:59.999Z") { cleaning: List<Cleaning> ->
+        DataFetcher.fetchData(this.applicationContext, "${dateFormat.format(currentDate)}T00:00:00.000Z", "${dateFormat.format(endDate)}T20:59:59.999Z", { cleaning: List<Cleaning> ->
             val intent = Intent(this.applicationContext, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
@@ -86,7 +90,7 @@ class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
                     }
                 }
             }
-        }
+        }, {})
 
         return Result.success()
     }

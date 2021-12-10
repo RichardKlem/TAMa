@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tama.MapsActivity
 import com.example.tama.R
 import com.example.tama.databinding.FragmentLocationBinding
+import com.example.tama.helpers.GPS
+import com.example.tama.helpers.SubLocation
+import com.example.tama.helpers.insertLocation
 import com.google.android.gms.maps.model.LatLng
 import kotlinx.android.synthetic.main.fragment_location.*
 import java.util.*
@@ -53,6 +56,7 @@ class LocationFragment : Fragment() {
         val locName: MutableList<String> = ArrayList()
 
         locationAdapter = LocationAdapter(mutableListOf())
+        locationAdapter.loadLocations(requireContext())
 
         val newLatLong: LatLng? = arguments?.getParcelable("SelectedLatLng")
 
@@ -69,41 +73,24 @@ class LocationFragment : Fragment() {
         rvLocationItems.adapter = locationAdapter
         rvLocationItems.layoutManager = LinearLayoutManager(this.context)
 
-        // Load stored user locations.
-        for (i in 0 until locationCount) {
-            // The index after location is count from zero, in difference to the count.
-            locName.add(sharedPreferences.getString("location_${i}", "")!!)
-            locationAdapter.addLocation(
-                Location(
-                    sharedPreferences.getString(
-                        "location_${i}",
-                        ""
-                    )!!
-                )
-            )
-        }
-
-        // If the LocationFragment is created from MapsActivity, create the new location.
-        if (newLatLong != null) {
-            val locationName = address.toString()
-            if (locationName.isNotEmpty()) {
-                val location = Location(locationName)
-                locationAdapter.addLocation(location)
-
-                // Persist the new location
-                val myEdit = sharedPreferences.edit()
-                myEdit.putString("location_${locationCount}", locationName)
-                myEdit.putInt("count", locationCount + 1)
-                myEdit.commit()
-            }
-        }
-
+        // This is for mocked data. Once we have map integrated, then no need of that.
+        var cnt = 0
         btnAddLocation.setOnClickListener {
-            val locationName = getString(R.string.placeholder_location_name)
-            if (locationName.isNotEmpty()) {
-                val location = Location(locationName)
-                locationAdapter.addLocation(location)
-            }
+            val locationName =
+                if (cnt % 2 == 1) getString(R.string.placeholder_location_name) else getString(R.string.placeholder_location_name) + "-- area"
+            val subLocations = if (cnt % 2 == 1) listOf(SubLocation(locationName)) else listOf(
+                SubLocation(locationName + "1"), SubLocation(locationName + "2")
+            )
+            cnt++
+            insertLocation(
+                requireContext(),
+                locationName,
+                locationName,
+                GPS(50.0, 14.0),
+                0,
+                subLocations
+            )
+            locationAdapter.loadLocations(requireContext())
         }
         val button = binding.button2
         button.setOnClickListener { openNewActivity() }
