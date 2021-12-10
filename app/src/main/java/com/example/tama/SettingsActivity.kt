@@ -1,10 +1,15 @@
 package com.example.tama
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.CheckBoxPreference
+import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreferenceCompat
 import com.example.tama.databinding.SettingsActivityBinding
 
 
@@ -28,8 +33,23 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
+        private var preferenceChangeListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
+
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
+
+            preferenceChangeListener =
+                SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+                    val preference = findPreference<Preference>(key)
+                    when (preference) {
+                        is SwitchPreferenceCompat -> {
+                            if (preference.key == "enable_notif") {
+                                context!!.getSharedPreferences("enable_notif", Context.MODE_PRIVATE)
+                                    .edit().putBoolean("enable_notif", preference.isChecked).apply()
+                            }
+                        }
+                    }
+                }
         }
     }
 
