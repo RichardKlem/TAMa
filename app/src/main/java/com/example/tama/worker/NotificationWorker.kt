@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -20,7 +21,7 @@ import java.util.*
 class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, params) {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
-        val off = this.applicationContext.getSharedPreferences("notifications-off", Context.MODE_PRIVATE).getBoolean("notifications-off", false)
+        val off = this.applicationContext.getSharedPreferences("enable_notif", Context.MODE_PRIVATE).getBoolean("enable_notif", false)
 
         if (off) {
             return Result.success()
