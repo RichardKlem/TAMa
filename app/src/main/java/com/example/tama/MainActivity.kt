@@ -1,17 +1,14 @@
 package com.example.tama
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.os.Build
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -20,11 +17,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.tama.databinding.ActivityMainBinding
-import com.example.tama.helpers.getEvents
 import com.example.tama.worker.EventFetcherWorker
 import com.example.tama.worker.NotificationWorker
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.concurrent.TimeUnit
@@ -34,10 +28,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private var selectedLatLng: LatLng? = null
-    private var bundle: Bundle = Bundle()
-
-    private val fragmentManager = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,14 +35,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val i = intent
-        val extras = i.extras
-        if (extras?.containsKey("SelectedLatLng") == true) {
-            selectedLatLng = i.getParcelableExtra("SelectedLatLng")
-        }
-
-        bundle.putParcelable("SelectedLatLng", selectedLatLng)
-        locationFragment.arguments = bundle
 
         if (ContextCompat.checkSelfPermission(
                 this,
