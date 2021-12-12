@@ -17,10 +17,7 @@
     <string name="notifications">Upozornění</string>
     <string name="enable_notif">Povolit Upozornění</string>
     <string name="select_language">Vyberte jazyk</string>
-<<<<<<< HEAD
     <string name="no_event_for_location">Žádné čištění</string>
-=======
     <string name="street_add_button_text">Přidat ulici</string>
     <string name="searchViewQueryHint">Vyhledat ulici</string>
->>>>>>> feature_location_select_from_map
 </resources>
