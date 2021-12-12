@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout2"
+    android:id="@+id/locationFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.locations.LocationFragment">
@@ -35,6 +35,5 @@
         app:layout_constraintStart_toStartOf="@+id/rvLocationItems"
         app:srcCompat="@drawable/plus"
         tools:ignore="SpeakableTextPresentCheck" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
