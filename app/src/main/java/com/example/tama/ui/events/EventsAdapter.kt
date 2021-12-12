@@ -21,6 +21,7 @@ class EventsAdapter(
     fun addEvent(event: Event) {
         events.add(event)
         notifyItemInserted(events.size - 1)
+//        notifyDataSetChanged()
     }
 
     private fun deleteEvent(position: Int) {
@@ -50,9 +51,9 @@ class EventsAdapter(
             val currentDateFormat = DateTimeFormatter.ofPattern("d.M.")
             val currentDate = date.format(currentDateFormat)
             if(tvDate.text == currentDate.toString()) {
-                clEvent.setBackgroundColor(Color.RED)
+                clEvent.setBackgroundColor(Color.parseColor("#FFFFFF"))
             } else {
-                clEvent.setBackgroundColor(Color.GREEN)
+                clEvent.setBackgroundColor(Color.parseColor("#C5DC93"))
             }
         }
     }
