@@ -51,7 +51,7 @@ class EventsAdapter(
             val currentDateFormat = DateTimeFormatter.ofPattern("d.M.")
             val currentDate = date.format(currentDateFormat)
             if(tvDate.text == currentDate.toString()) {
-                clEvent.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                clEvent.setBackgroundColor(Color.parseColor("#D7381C"))
             } else {
                 clEvent.setBackgroundColor(Color.parseColor("#C5DC93"))
             }
