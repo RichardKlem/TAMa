@@ -32,7 +32,4 @@
     <string name="select_language">Select Language</string>
     <string name="street_add_button_text">Add this street</string>
     <string name="searchViewQueryHint">Search Address</string>
-
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Synchronization</string>
 </resources>
