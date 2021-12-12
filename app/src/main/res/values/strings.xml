@@ -17,6 +17,9 @@
     <string name="endTime" translatable="false">13:00</string>
     <string name="placeholder_location_name" translatable="false">Božetěchova</string>
 
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Synchronization</string>
+
     <!-- Preference Titles -->
     <string name="notifications">Notifications</string>
     <string name="language">Language</string>
@@ -27,4 +30,6 @@
 
     <!-- Sync Preferences -->
     <string name="select_language">Select Language</string>
+    <string name="street_add_button_text">Add this street</string>
+    <string name="searchViewQueryHint">Search Address</string>
 </resources>

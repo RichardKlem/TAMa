@@ -18,4 +18,6 @@
     <string name="enable_notif">Povolit Upozornění</string>
     <string name="select_language">Vyberte jazyk</string>
     <string name="no_event_for_location">Žádné čištění</string>
+    <string name="street_add_button_text">Přidat ulici</string>
+    <string name="searchViewQueryHint">Vyhledat ulici</string>
 </resources>
