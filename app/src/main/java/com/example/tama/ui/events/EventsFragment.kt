@@ -2,6 +2,7 @@ package com.example.tama.ui.events
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,12 @@ class EventsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val cleanings = getEvents(this.context!!)
+        val cleaningsNames = mutableListOf<String>()
+        for (item in cleanings.events) {
+            cleaningsNames.add(item.name)
+        }
+        Log.d("CLEANINGS", "cleanings: $cleaningsNames")
+
         locationsAdapter = EventsCardAdapter(mutableListOf(), cleanings)
 
         val locations = getLocations(this.context!!)
