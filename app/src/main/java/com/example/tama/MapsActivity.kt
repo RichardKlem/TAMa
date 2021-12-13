@@ -48,7 +48,7 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
                 if (location.isNotEmpty()) {
                     try {
-                        addressList = geocoder.getFromLocationName(location, 1)
+                        addressList = geocoder.getFromLocationName("$location Brno", 1)
                         if (addressList.isNotEmpty()) {
                             val address = addressList[0]
                             val latLng = LatLng(address.latitude, address.longitude)
