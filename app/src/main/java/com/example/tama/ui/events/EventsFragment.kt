@@ -11,15 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.tama.databinding.FragmentEventsBinding
 import com.example.tama.helpers.getEvents
+import com.example.tama.helpers.getLocations
 import kotlinx.android.synthetic.main.fragment_events.*
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 
 class EventsFragment : Fragment() {
 
-    private lateinit var eventsAdapter: EventsAdapter
+    private lateinit var locationsAdapter: EventsCardAdapter
     private lateinit var eventsViewModel: EventsViewModel
     private var _binding: FragmentEventsBinding? = null
 
@@ -43,27 +41,17 @@ class EventsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        eventsAdapter = EventsAdapter(mutableListOf())
-
-        rvEventItems.adapter = eventsAdapter
-        rvEventItems.layoutManager = LinearLayoutManager(this.context)
-
-        val formatter = DateTimeFormatter.ofPattern("d. M. yyyy, HH.mm")
-
-        val dateFormat = DateTimeFormatter.ofPattern("d.M.")
-        val timeFormat = DateTimeFormatter.ofPattern("HH:mm")
-
         val cleanings = getEvents(this.context!!)
+        locationsAdapter = EventsCardAdapter(mutableListOf(), cleanings)
 
-        for (item in cleanings.events) {
-            val name = item.name
-            val date = LocalDate.parse(item.from, formatter).format(dateFormat)
-            val from = LocalTime.parse(item.from, formatter).format(timeFormat)
-            val to = LocalTime.parse(item.to, formatter).format(timeFormat)
-            val event = Event(name, date, from, to)
-//            TODO - getLocations() a porovnavat item.name s location.sublocation.name
-            eventsAdapter.addEvent(event)
+        val locations = getLocations(this.context!!)
+
+        for (l in locations.locations) {
+            locationsAdapter.addLoc(l)
         }
+
+        rvEventItems.adapter = locationsAdapter
+        rvEventItems.layoutManager = LinearLayoutManager(this.context)
     }
 
     override fun onDestroyView() {

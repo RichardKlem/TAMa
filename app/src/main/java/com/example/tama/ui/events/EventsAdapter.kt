@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tama.R
-import kotlinx.android.synthetic.main.events_on_main.view.*
+import kotlinx.android.synthetic.main.events_in_card.view.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -21,6 +21,7 @@ class EventsAdapter(
     fun addEvent(event: Event) {
         events.add(event)
         notifyItemInserted(events.size - 1)
+//        notifyDataSetChanged()
     }
 
     private fun deleteEvent(position: Int) {
@@ -31,7 +32,7 @@ class EventsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         return EventViewHolder(
             LayoutInflater.from(parent.context).inflate(
-                R.layout.events_on_main,
+                R.layout.events_in_card,
                 parent,
                 false
             )
@@ -50,9 +51,9 @@ class EventsAdapter(
             val currentDateFormat = DateTimeFormatter.ofPattern("d.M.")
             val currentDate = date.format(currentDateFormat)
             if(tvDate.text == currentDate.toString()) {
-                clEvent.setBackgroundColor(Color.RED)
+                clEvent.setBackgroundColor(Color.parseColor("#D7381C"))
             } else {
-                clEvent.setBackgroundColor(Color.GREEN)
+                clEvent.setBackgroundColor(Color.parseColor("#C5DC93"))
             }
         }
     }
