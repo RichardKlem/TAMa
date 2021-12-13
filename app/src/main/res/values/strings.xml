@@ -8,7 +8,7 @@
     <string name="delete_location">Delete Location</string>
     <string name="settings">Settings</string>
     <string name="event">Event</string>
-    <string name="no_event_for_location">There are no cleaning events in this area</string>
+    <string name="no_event_for_location">No cleaning events</string>
     <string name="enable_notif">Enable Notifications</string>
     <string name="date" translatable="false">24.12.</string>
     <string name="date_early" translatable="false">8.12.</string>
