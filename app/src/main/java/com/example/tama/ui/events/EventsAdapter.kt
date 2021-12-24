@@ -53,7 +53,7 @@ class EventsAdapter(
             if(tvDate.text == currentDate.toString()) {
                 clEvent.setBackgroundColor(Color.parseColor("#EC0030"))
             } else {
-                clEvent.setBackgroundColor(Color.parseColor("#D8C962"))
+                clEvent.setBackgroundColor(Color.parseColor("#5BCA5F"))
             }
         }
     }

@@ -30,7 +30,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/rvLocationItems"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/plus"
+        app:tint="@color/white"
+        app:srcCompat="@drawable/ic_baseline_plus_24"
         tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
