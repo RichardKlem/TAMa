@@ -32,4 +32,5 @@
     <string name="select_language">Select Language</string>
     <string name="street_add_button_text">Add</string>
     <string name="searchViewQueryHint">Search Address</string>
+    <string name="searchIconDescription">Search Icon</string>
 </resources>

@@ -20,4 +20,5 @@
     <string name="no_event_for_location">Žádné čištění</string>
     <string name="street_add_button_text">Přidat ulici</string>
     <string name="searchViewQueryHint">Vyhledat ulici</string>
+    <string name="searchIconDescription">Ikona vyhledávání</string>
 </resources>

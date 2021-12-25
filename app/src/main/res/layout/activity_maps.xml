@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <fragment xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/map"
@@ -11,20 +11,33 @@
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
 
-    <SearchView
-        android:id="@+id/idSearchView"
-        style="@style/searchbar"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/searchbar"
         android:layout_margin="10dp"
-        android:elevation="5dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="@string/searchViewQueryHint"
+        >
+        <ImageView
+            android:id="@+id/actvIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:contentDescription="@string/searchIconDescription"
+            android:src="@drawable/ic_baseline_search_24" />
 
-        />
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView"
+            android:layout_width="355dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:hint="@string/searchViewQueryHint"
+            android:iconifiedByDefault="true"
+            android:maxLines="1"
+            android:minHeight="48dp" />
+    </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
+        android:id="@+id/mapAddButton"
         android:layout_width="wrap_content"
         android:layout_height="67dp"
         android:layout_alignParentStart="true"
@@ -34,6 +47,6 @@
         android:layout_marginTop="620dp"
         android:layout_marginEnd="140dp"
         android:layout_marginBottom="44dp"
-        app:icon="@drawable/ic_baseline_check_24"
-        android:text="@string/street_add_button_text" />
+        android:text="@string/street_add_button_text"
+        app:icon="@drawable/ic_baseline_check_24" />
 </RelativeLayout>
