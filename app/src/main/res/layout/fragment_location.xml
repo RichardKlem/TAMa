@@ -5,6 +5,7 @@
     android:id="@+id/locationFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    style="@style/baseBackground"
     tools:context=".ui.locations.LocationFragment">
 
     <androidx.recyclerview.widget.RecyclerView

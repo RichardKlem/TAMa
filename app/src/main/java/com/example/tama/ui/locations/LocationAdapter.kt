@@ -43,6 +43,10 @@ class LocationAdapter(
         val curLocation = locations[position]
         holder.itemView.apply {
             tvLocation.text = curLocation.userNaming
+            if (curLocation.radius > 1) {
+                locationRadius.text =
+                    resources.getString(R.string.radiusOnLocation, curLocation.radius)
+            }
 
             btnDeleteLocation.setOnClickListener {
                 deleteLocation(context, position)
