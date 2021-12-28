@@ -37,6 +37,12 @@ import java.util.*
 @Serializable
 data class StreetsObj(val streetsList: MutableList<String>)
 
+@Serializable
+data class Street(val name: String, val gps: GPS)
+
+@Serializable
+data class StreetsWithGPS(val streetsList: MutableList<Street>)
+
 class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private var mMap: GoogleMap? = null
     private var circle: Circle? = null

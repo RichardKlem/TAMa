@@ -36,26 +36,63 @@
         style="@style/searchbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/searchbar"
         android:layout_margin="10dp"
-        >
-        <ImageView
-            android:id="@+id/actvIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:contentDescription="@string/searchIconDescription"
-            android:src="@drawable/ic_baseline_search_24" />
+        android:orientation="vertical">
 
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="355dp"
+        <LinearLayout
+
+            android:layout_width="398dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:hint="@string/searchViewQueryHint"
-            android:iconifiedByDefault="true"
-            android:maxLines="1"
-            android:minHeight="48dp" />
+            android:layout_margin="4dp">
+
+            <ImageView
+                android:id="@+id/actvIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/searchIconDescription"
+                android:src="@drawable/ic_baseline_search_24" />
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/autoCompleteTextView"
+                android:layout_width="293dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:hint="@string/searchViewQueryHint"
+                android:iconifiedByDefault="true"
+                android:maxLines="2"
+                android:minHeight="48dp" />
+
+            <LinearLayout
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/area" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchArea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/radiusSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="1"
+            android:value="100"
+            android:valueFrom="25"
+            android:valueTo="500"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
