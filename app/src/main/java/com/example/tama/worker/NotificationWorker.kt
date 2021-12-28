@@ -15,6 +15,7 @@ import androidx.work.WorkerParameters
 import com.example.tama.MainActivity
 import com.example.tama.data.entity.Cleaning
 import com.example.tama.data.fetch.DataFetcher
+import com.example.tama.helpers.getLocations
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -61,8 +62,15 @@ class NotificationWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
 
             cleaning.forEach { cleaning ->
                 var day = fromFormat.format(cleaning.from)
+                var selected = false
 
-                if (cleaning.to >= currentDate)
+                getLocations(this.applicationContext).locations.forEach { location ->
+                    if (cleaning.name.toLowerCase().contains(location.userNaming.toLowerCase())) {
+                        selected = true
+                    }
+                }
+
+                if (cleaning.to >= currentDate && selected)
                 {
                     this.createNotificationChannel("1", "Blokové čistění")
 
