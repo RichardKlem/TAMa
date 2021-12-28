@@ -2,12 +2,16 @@ package com.example.tama
 
 import android.R.layout.select_dialog_item
 import android.content.Intent
+import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.FragmentActivity
@@ -18,9 +22,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.Circle
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -31,23 +38,47 @@ import java.util.*
 @Serializable
 data class StreetsObj(val streetsList: MutableList<String>)
 
+@Serializable
+data class Street(val name: String, val gps: GPS)
+
+@Serializable
+data class StreetsWithGPS(val streetsList: MutableList<Street>)
+
 class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     private var mMap: GoogleMap? = null
-    private var marker: Marker? = null
+    private var circle: Circle? = null
+    private var midLatLng: LatLng? = LatLng(49.1962063, 16.6037825)
+    private var streetsWithGps: StreetsWithGPS = StreetsWithGPS(mutableListOf())
     private var streets: StreetsObj = StreetsObj(mutableListOf())
 
-    private val defaultAddress = "Husova"
-    private val defaultLatLng: LatLng = LatLng(49.1962063, 16.6037825)
-
-    private var selectedLatLng: LatLng = defaultLatLng
-    private var selectedAdress: String = defaultAddress
+    private val circleFillColor: Int =
+        0x33 and 0xff shl 24 or (0xff and 0xff shl 16) or (0x00 and 0xff shl 8) or (0x00 and 0xff)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val geocoder = Geocoder(this, Locale.getDefault())
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        // Load all Brno streets.
+        val areaSwitch = findViewById<View>(R.id.switchArea) as SwitchMaterial
+        val radiusSlider = findViewById<View>(R.id.radiusSlider) as Slider
+
+
+
+        try {
+            val input = this.assets.open("streetsWithGPS.json")
+            val buffer = ByteArray(input.available())
+            input.read(buffer)
+            input.close()
+            val bufferString = String(buffer, charset("UTF-8"))
+            if (bufferString.isNotEmpty()) {
+                streetsWithGps = Json.decodeFromString(bufferString)
+            }
+        } catch (e: Exception) {
+            Log.e(
+                "MapsActivity: ",
+                "Something went wrong while loading streets with GPS from assets JSON.\n ${e.printStackTrace()}"
+            )
+        }
         try {
             val input = this.assets.open("brnostreets.json")
             val buffer = ByteArray(input.available())
@@ -60,13 +91,32 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         } catch (e: Exception) {
             Log.e(
                 "MapsActivity: ",
-                "Something went wrong while loading streets from assets JSON.\n $e"
+                "Something went wrong while loading streets from assets JSON.\n ${e.printStackTrace()}"
             )
+        }
+
+        radiusSlider.addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
+            if (areaSwitch.isChecked) {
+                radiusSlider.visibility = VISIBLE
+                circle?.radius = value.toDouble()
+            }
+        })
+
+        areaSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                radiusSlider.visibility = VISIBLE
+                circle?.center = midLatLng!!
+                circle?.isVisible = true
+
+            } else {
+                radiusSlider.visibility = GONE
+                circle?.isVisible = false
+            }
         }
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment?
         val button = findViewById<View>(R.id.mapAddButton)
-        button.setOnClickListener { openNewActivity() }
+        button.setOnClickListener { openNewActivity(geocoder) }
 
         val actv = findViewById<View>(R.id.autoCompleteTextView) as AutoCompleteTextView?
         actv?.setOnKeyListener(object : View.OnKeyListener {
@@ -84,16 +134,27 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                                 val address = addressList[0]
                                 val latLng = LatLng(address.latitude, address.longitude)
 
-                                marker?.remove()
-                                marker = mMap?.addMarker(
-                                    MarkerOptions().position(latLng).title(location)
-                                )
                                 mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f))
-                                selectedLatLng = latLng
-                                selectedAdress = address.thoroughfare  // Street name
+
+                                if (circle != null) {
+                                    circle?.center = latLng
+                                } else {
+                                    circle = mMap?.addCircle(
+                                        CircleOptions()
+                                            .center(latLng)
+                                            .radius(radiusSlider.value.toDouble())
+                                            .strokeWidth(4F)
+                                            .strokeColor(Color.RED)
+                                            .fillColor(circleFillColor)
+                                            .visible(areaSwitch.isChecked)
+                                    )
+                                }
                             }
                         } catch (e: IOException) {
-                            e.printStackTrace()
+                            Log.e(
+                                "Maps Activity: ",
+                                "Geocoding gone wrong.\n${e.printStackTrace()}"
+                            )
                         }
                     }
                     return true
@@ -101,19 +162,66 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 return false
             }
         })
-
         mapFragment?.getMapAsync(this)
     }
 
-    private fun openNewActivity() {
-        insertLocation(
-            this,
-            selectedAdress,
-            selectedAdress,
-            GPS(selectedLatLng.latitude, selectedLatLng.longitude),
-            1,
-            listOf(SubLocation(selectedAdress))
-        )
+    private fun openNewActivity(geocoder: Geocoder) {
+        val snackbar = Snackbar
+            .make(findViewById(R.id.mapsActivityView), getString(R.string.unknownStreet), Snackbar.LENGTH_LONG)
+        val addressName: String
+        try {
+            addressName = geocoder.getFromLocation(
+                midLatLng!!.latitude,
+                midLatLng!!.longitude,
+                1
+            )[0].thoroughfare
+        } catch (e: Exception) {
+            snackbar.show()
+            Log.e(
+                "Maps Activity - GEOCODER: ",
+                "Error in geocoding LatLong.\n${e.printStackTrace()}"
+            )
+            return
+        }
+
+        val areaSwitch = findViewById<View>(R.id.switchArea) as SwitchMaterial
+        val radiusSlider = findViewById<View>(R.id.radiusSlider) as Slider
+
+        // Each location has at least one sub-location = itself.
+        val streetsInArea = mutableListOf<SubLocation>()
+        if (areaSwitch.isChecked) {
+            for (street in streetsWithGps.streetsList) {
+                val locationA = Location("mid point")
+                locationA.latitude = midLatLng!!.latitude
+                locationA.longitude = midLatLng!!.longitude
+
+                val locationB = Location("street")
+                locationB.latitude = street.gps.lat
+                locationB.longitude = street.gps.long
+
+                val distance: Float = locationA.distanceTo(locationB)
+                if (distance <= radiusSlider.value)
+                    streetsInArea.add(SubLocation(street.name))
+            }
+            insertLocation(
+                this,
+                addressName,
+                addressName,
+                GPS(midLatLng!!.latitude, midLatLng!!.longitude),
+                radiusSlider.value.toInt(),
+                streetsInArea
+            )
+        } else {
+            streetsInArea.add(SubLocation(addressName))
+            insertLocation(
+                this,
+                addressName,
+                addressName,
+                GPS(midLatLng!!.latitude, midLatLng!!.longitude),
+                1,
+                streetsInArea
+            )
+        }
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
@@ -127,7 +235,38 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         actv?.threshold = 1
 
         actv?.setAdapter(adapter)
+
+
         mMap = googleMap
-        mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(selectedLatLng, 15f))
+        mMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(midLatLng!!, 15f))
+
+        mMap?.setOnCameraMoveListener {
+            circle?.isVisible = false
+        }
+
+        val areaSwitch = findViewById<View>(R.id.switchArea) as SwitchMaterial
+        val radiusSlider = findViewById<View>(R.id.radiusSlider) as Slider
+
+        mMap?.setOnCameraIdleListener {
+            val oldLatLng = midLatLng
+            try {
+                midLatLng = mMap?.cameraPosition?.target
+            } catch (e: Exception) {
+                midLatLng = oldLatLng
+                Log.e("Map Camera Position Error", "\n${e.printStackTrace()}")
+            }
+            circle?.center = midLatLng!!
+            circle?.isVisible = areaSwitch.isChecked
+        }
+
+        circle = mMap?.addCircle(
+            CircleOptions()
+                .center(midLatLng!!)
+                .radius(radiusSlider.value.toDouble())
+                .strokeWidth(4F)
+                .strokeColor(Color.RED)
+                .fillColor(circleFillColor)
+                .visible(areaSwitch.isChecked)
+        )
     }
 }

@@ -1,52 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapsActivityView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <fragment xmlns:tools="http://schemas.android.com/tools"
+    <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".MapsActivity" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/map_marker"
+            android:minWidth="40dp"
+            android:minHeight="40dp"
+            android:src="@drawable/ic_baseline_location_on_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.48" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
     <LinearLayout
+        style="@style/searchbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/searchbar"
         android:layout_margin="10dp"
-        >
-        <ImageView
-            android:id="@+id/actvIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="10dp"
-            android:contentDescription="@string/searchIconDescription"
-            android:src="@drawable/ic_baseline_search_24" />
+        android:orientation="vertical">
 
-        <AutoCompleteTextView
-            android:id="@+id/autoCompleteTextView"
-            android:layout_width="355dp"
+        <LinearLayout
+
+            android:layout_width="398dp"
             android:layout_height="wrap_content"
-            android:layout_margin="2dp"
-            android:hint="@string/searchViewQueryHint"
-            android:iconifiedByDefault="true"
-            android:maxLines="1"
-            android:minHeight="48dp" />
+            android:layout_margin="4dp">
+
+            <ImageView
+                android:id="@+id/actvIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/searchIconDescription"
+                android:src="@drawable/ic_baseline_search_24" />
+
+            <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                android:id="@+id/autoCompleteTextView"
+                android:layout_width="293dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="2dp"
+                android:hint="@string/searchViewQueryHint"
+                android:iconifiedByDefault="true"
+                android:maxLines="2"
+                android:minHeight="48dp" />
+
+            <LinearLayout
+                android:layout_width="65dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/area" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchArea"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/radiusSlider"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stepSize="1"
+            android:value="100"
+            android:valueFrom="25"
+            android:valueTo="500"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mapAddButton"
         android:layout_width="wrap_content"
-        android:layout_height="67dp"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="140dp"
-        android:layout_marginTop="620dp"
         android:layout_marginEnd="140dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="56dp"
         android:text="@string/street_add_button_text"
         app:icon="@drawable/ic_baseline_check_24" />
+
 </RelativeLayout>

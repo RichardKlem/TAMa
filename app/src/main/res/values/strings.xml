@@ -24,13 +24,14 @@
     <string name="notifications">Notifications</string>
     <string name="language">Language</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
     <!-- Sync Preferences -->
     <string name="select_language">Select Language</string>
     <string name="street_add_button_text">Add</string>
     <string name="searchViewQueryHint">Search Address</string>
     <string name="searchIconDescription">Search Icon</string>
+    <string name="area">Area</string>
+    <string name="radiusOnLocation" translatable="false">+%d m</string>
+    <string name="unknownLocation">Unknown street :(</string>
+    <string name="unknownStreet">Cannot find the street. Try again with different location.</string>
+    <string name="map_marker">Map Marker</string>
 </resources>

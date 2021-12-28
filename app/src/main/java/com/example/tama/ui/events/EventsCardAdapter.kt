@@ -1,7 +1,6 @@
 package com.example.tama.ui.events
 
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +56,6 @@ class EventsCardAdapter(
         for (item in cleanings.events) {
             cleaningsNames.add(item.name)
         }
-//        Log.d("CLEANINGS", "cleanings: $cleaningsNames")
 
         holder.itemView.apply {
             tvEventsTitle.text = curLocation.userNaming
@@ -65,7 +63,7 @@ class EventsCardAdapter(
             var eventFound = false
 
             for (item in subLocations) {
-                val subLocName = curLocation.technicalName
+                val subLocName = item.technicalName
 
                 if (subLocName in cleaningsNames) {
                     for (it in cleanings.events) {
