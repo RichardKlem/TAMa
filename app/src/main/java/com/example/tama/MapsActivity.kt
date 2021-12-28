@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -60,6 +61,8 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
         val areaSwitch = findViewById<View>(R.id.switchArea) as SwitchMaterial
         val radiusSlider = findViewById<View>(R.id.radiusSlider) as Slider
+
+
 
         try {
             val input = this.assets.open("streetsWithGPS.json")
@@ -163,7 +166,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
     }
 
     private fun openNewActivity(geocoder: Geocoder) {
-        var addressName = getString(R.string.unknownLocation)
+        val snackbar = Snackbar
+            .make(findViewById(R.id.mapsActivityView), getString(R.string.unknownStreet), Snackbar.LENGTH_LONG)
+        val addressName: String
         try {
             addressName = geocoder.getFromLocation(
                 midLatLng!!.latitude,
@@ -171,10 +176,12 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 1
             )[0].thoroughfare
         } catch (e: Exception) {
+            snackbar.show()
             Log.e(
                 "Maps Activity - GEOCODER: ",
                 "Error in geocoding LatLong.\n${e.printStackTrace()}"
             )
+            return
         }
 
         val areaSwitch = findViewById<View>(R.id.switchArea) as SwitchMaterial

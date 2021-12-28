@@ -32,4 +32,6 @@
     <string name="area">Area</string>
     <string name="radiusOnLocation" translatable="false">+%d m</string>
     <string name="unknownLocation">Unknown street :(</string>
+    <string name="unknownStreet">Cannot find the street. Try again with different location.</string>
+    <string name="map_marker">Map Marker</string>
 </resources>

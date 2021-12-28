@@ -21,4 +21,6 @@
     <string name="searchIconDescription">Ikona vyhledávání</string>
     <string name="area">Oblast</string>
     <string name="unknownLocation">Neznámá ulice :(</string>
+    <string name="unknownStreet">Ulice nenalezena. Opakujte výběr s jiným výběrem.</string>
+    <string name="map_marker">Značka pozice</string>
 </resources>

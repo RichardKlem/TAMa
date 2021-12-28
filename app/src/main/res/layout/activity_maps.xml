@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mapsActivityView"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,7 +21,7 @@
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="Map Marker"
+            android:contentDescription="@string/map_marker"
             android:minWidth="40dp"
             android:minHeight="40dp"
             android:src="@drawable/ic_baseline_location_on_24"
@@ -98,14 +99,14 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/mapAddButton"
         android:layout_width="wrap_content"
-        android:layout_height="67dp"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="140dp"
-        android:layout_marginTop="620dp"
         android:layout_marginEnd="140dp"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="56dp"
         android:text="@string/street_add_button_text"
         app:icon="@drawable/ic_baseline_check_24" />
 
