@@ -48,6 +48,9 @@ class LocationAdapter(
                 locationRadius.text =
                     resources.getString(R.string.radiusOnLocation, curLocation.radius)
             }
+            else {
+                locationRadius.text = ""
+            }
 
             btnDeleteLocation.setOnClickListener {
                 deleteLocation(context, position)
