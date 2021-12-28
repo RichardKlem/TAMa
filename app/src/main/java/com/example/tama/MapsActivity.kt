@@ -1,17 +1,21 @@
 package com.example.tama
 
 import android.R.layout.select_dialog_item
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
+import android.text.Editable
+import android.text.Selection
+import android.text.TextWatcher
 import android.util.Log
-import android.view.KeyEvent
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.fragment.app.FragmentActivity
@@ -61,8 +65,18 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
 
         val areaSwitch = findViewById<View>(R.id.switchArea) as SwitchMaterial
         val radiusSlider = findViewById<View>(R.id.radiusSlider) as Slider
+        val actv = findViewById<View>(R.id.autoCompleteTextView) as AutoCompleteTextView?
 
+        val manager = this.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
+        actv?.requestFocus()
+        val timer = Timer()
+        timer.schedule(object : TimerTask() {
+            override fun run() {
+                showSoftKeyboard(findViewById(R.id.autoCompleteTextView))
+                timer.cancel()
+            }
+        }, 1000)
 
         try {
             val input = this.assets.open("streetsWithGPS.json")
@@ -118,12 +132,9 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
         val button = findViewById<View>(R.id.mapAddButton)
         button.setOnClickListener { openNewActivity(geocoder) }
 
-        val actv = findViewById<View>(R.id.autoCompleteTextView) as AutoCompleteTextView?
-        actv?.setOnKeyListener(object : View.OnKeyListener {
-            override fun onKey(v: View?, keyCode: Int, event: KeyEvent): Boolean {
-                if (event.action == KeyEvent.ACTION_DOWN &&
-                    keyCode == KeyEvent.KEYCODE_ENTER
-                ) {
+        actv?.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (s.endsWith("\n")) {
                     val location = actv.text.toString()
                     val addressList: List<Address>?
 
@@ -157,17 +168,33 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                             )
                         }
                     }
-                    return true
+                    actv.text = actv.text.trim() as Editable?
+                    Selection.setSelection(actv.text, actv.length())
+                    closeKeyboard(manager)
+                    actv.clearFocus()
+                    return
                 }
-                return false
             }
+
+            override fun beforeTextChanged(
+                s: CharSequence, start: Int, count: Int,
+                after: Int
+            ) {
+            }
+
+            override fun afterTextChanged(s: Editable) {}
         })
+
         mapFragment?.getMapAsync(this)
     }
 
     private fun openNewActivity(geocoder: Geocoder) {
         val snackbar = Snackbar
-            .make(findViewById(R.id.mapsActivityView), getString(R.string.unknownStreet), Snackbar.LENGTH_LONG)
+            .make(
+                findViewById(R.id.mapsActivityView),
+                getString(R.string.unknownStreet),
+                Snackbar.LENGTH_LONG
+            )
         val addressName: String
         try {
             addressName = geocoder.getFromLocation(
@@ -268,5 +295,17 @@ class MapsActivity : FragmentActivity(), OnMapReadyCallback {
                 .fillColor(circleFillColor)
                 .visible(areaSwitch.isChecked)
         )
+    }
+
+    private fun showSoftKeyboard(view: View) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    fun closeKeyboard(manager: InputMethodManager) {
+        val view = this.currentFocus
+        if (view != null) {
+            manager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 }
