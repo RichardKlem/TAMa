@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tama.R
 import com.example.tama.helpers.Location
@@ -46,6 +47,10 @@ class LocationAdapter(
 
             btnDeleteLocation.setOnClickListener {
                 deleteLocation(context, position)
+            }
+
+            clLocation.setOnClickListener { view ->
+                view.findNavController().navigate(R.id.navigation_events)
             }
         }
     }
