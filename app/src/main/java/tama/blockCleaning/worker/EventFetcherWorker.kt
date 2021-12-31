@@ -15,7 +15,7 @@ import tama.blockCleaning.helpers.insertEvent
 import java.text.SimpleDateFormat
 import java.util.*
 
-class EventFetcherWorker(ctx: Context, params: WorkerParameters): Worker(ctx, params) {
+class EventFetcherWorker(ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
     private var streets: List<Street>? = null
     private var cleanings: List<Cleaning>? = null
 
@@ -23,12 +23,14 @@ class EventFetcherWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doWork(): Result {
         val currentDate = Calendar.getInstance().time
-        val c = Calendar.getInstance()
-        c.add(Calendar.DATE, 1)
-        val endDate = c.time
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.DATE, 1)
+        val endDate = calendar.time
         val dateFormat = SimpleDateFormat("yyyy-MM-dd")
 
-        DataFetcher.fetchData(this.applicationContext, "${dateFormat.format(currentDate)}T00:00:00.000Z", "${dateFormat.format(endDate)}T20:59:59.999Z",
+        DataFetcher.fetchData(this.applicationContext,
+            "${dateFormat.format(currentDate)}T00:00:00.000Z",
+            "${dateFormat.format(endDate)}T20:59:59.999Z",
             { c ->
                 this.cleanings = c
                 if (this.streets != null) {
@@ -46,8 +48,7 @@ class EventFetcherWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
         return Result.success()
     }
 
-    private fun onFetched(): Unit
-    {
+    private fun onFetched() {
         val eventsOld = getEvents(this.applicationContext)
         eventsOld.events.forEach { event ->
             deleteEvent(this.applicationContext, event.id)
@@ -59,7 +60,13 @@ class EventFetcherWorker(ctx: Context, params: WorkerParameters): Worker(ctx, pa
         this.cleanings?.forEach { cleaning ->
             val street = this.streets?.find { s -> s.id == cleaning.sId }
             if (street != null) {
-                insertEvent(this.applicationContext, cleaning.name, gps, dateFormat.format(cleaning.from), dateFormat.format(cleaning.to))
+                insertEvent(
+                    this.applicationContext,
+                    cleaning.name,
+                    gps,
+                    dateFormat.format(cleaning.from),
+                    dateFormat.format(cleaning.to)
+                )
             }
         }
     }

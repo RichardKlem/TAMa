@@ -38,9 +38,8 @@ class SettingsActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferen
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
 
             preferenceChangeListener =
-                SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                    val preference = findPreference<Preference>(key)
-                    when (preference) {
+                SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+                    when (val preference = findPreference<Preference>(key)) {
                         is SwitchPreferenceCompat -> {
                             if (preference.key == "enable_notif") {
                                 context!!.getSharedPreferences("enable_notif", Context.MODE_PRIVATE)

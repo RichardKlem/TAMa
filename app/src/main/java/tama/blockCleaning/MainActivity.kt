@@ -17,7 +17,6 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.android.synthetic.main.activity_main.*
 import tama.blockCleaning.databinding.ActivityMainBinding
 import tama.blockCleaning.worker.EventFetcherWorker
 import tama.blockCleaning.worker.NotificationWorker
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        nav_view.itemIconTintList = null
+        navView.itemIconTintList = null
 
         // set notification worker
         val notificationWorkerRequest =

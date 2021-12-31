@@ -4,9 +4,11 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.location_on_main.view.*
 import tama.blockCleaning.R
 import tama.blockCleaning.helpers.Location
 import tama.blockCleaning.helpers.deleteLocationDB
@@ -41,14 +43,18 @@ class LocationAdapter(
     }
 
     override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
+        val tvLocation = holder.itemView.findViewById<TextView>(R.id.tvLocation)
+        val locationRadius = holder.itemView.findViewById<TextView>(R.id.locationRadius)
+        val btnDeleteLocation = holder.itemView.findViewById<ImageButton>(R.id.btnDeleteLocation)
+        val clLocation = holder.itemView.findViewById<ConstraintLayout>(R.id.clLocation)
+
         val curLocation = locations[position]
         holder.itemView.apply {
             tvLocation.text = curLocation.userNaming
             if (curLocation.radius > 1) {
                 locationRadius.text =
                     resources.getString(R.string.radiusOnLocation, curLocation.radius)
-            }
-            else {
+            } else {
                 locationRadius.text = ""
             }
 

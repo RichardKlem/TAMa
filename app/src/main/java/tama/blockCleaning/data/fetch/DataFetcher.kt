@@ -2,8 +2,10 @@ package tama.blockCleaning.data.fetch
 
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.android.volley.Request
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import org.json.JSONException
@@ -18,7 +20,13 @@ import java.util.*
 class DataFetcher {
     companion object {
         @RequiresApi(Build.VERSION_CODES.O)
-        fun fetchData(context: Context, from: String, to: String, callback: (List<Cleaning>) -> Unit, streetsCallback: (List<Street>) -> Unit) {
+        fun fetchData(
+            context: Context,
+            from: String,
+            to: String,
+            callback: (List<Cleaning>) -> Unit,
+            streetsCallback: (List<Street>) -> Unit
+        ) {
             val streets = mutableListOf<Street>()
             val cleanings = mutableListOf<Cleaning>()
 
@@ -44,8 +52,8 @@ class DataFetcher {
                     print("Streets loaded")
                     streetsCallback(streets.toList())
                 },
-                { error ->
-                    // TODO: Handle error
+                { error: VolleyError ->
+                    Log.e("Volley request ERROR: ", "${error.printStackTrace()}")
                 }
             )
 
@@ -102,8 +110,8 @@ class DataFetcher {
                     print("Cleanings loaded")
                     callback(cleanings.toList())
                 },
-                { error ->
-                    // TODO: Handle error
+                { error: VolleyError ->
+                    Log.e("Volley request ERROR: ", "${error.printStackTrace()}")
                 }
             )
 

@@ -4,10 +4,11 @@ import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.event_on_main.view.*
 import tama.blockCleaning.R
 import tama.blockCleaning.helpers.Location
 import tama.blockCleaning.helpers.LocationEvents
@@ -25,11 +26,6 @@ class EventsCardAdapter(
     fun addLoc(loc: Location) {
         locations.add(loc)
         notifyItemInserted(locations.size - 1)
-    }
-
-    private fun deleteLoc(position: Int) {
-        locations.removeAt(position)
-        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LocEventViewHolder {
@@ -57,6 +53,10 @@ class EventsCardAdapter(
             cleaningsNames.add(item.name)
         }
 
+        val rvEvent = holder.itemView.findViewById<RecyclerView>(R.id.rvEvent)
+        val tvEventsTitle = holder.itemView.findViewById<TextView>(R.id.tvEventsTitle)
+        val ibExpandEvent = holder.itemView.findViewById<ImageButton>(R.id.ibExpandEvent)
+
         holder.itemView.apply {
             tvEventsTitle.text = curLocation.userNaming
             val subLocations = curLocation.listOfSubLocations
@@ -82,13 +82,13 @@ class EventsCardAdapter(
             }
 
             ibExpandEvent.setOnClickListener {
-                if (clEvent.visibility == View.GONE)
-                    clEvent.visibility = View.VISIBLE
+                if (rvEvent.visibility == View.GONE)
+                    rvEvent.visibility = View.VISIBLE
                 else
-                    clEvent.visibility = View.GONE
+                    rvEvent.visibility = View.GONE
             }
-            clEvent.adapter = eventsAdapter
-            clEvent.layoutManager = LinearLayoutManager(context)
+            rvEvent.adapter = eventsAdapter
+            rvEvent.layoutManager = LinearLayoutManager(context)
 
             if (!eventFound) {
                 val title = context.getString(R.string.no_event_for_location)

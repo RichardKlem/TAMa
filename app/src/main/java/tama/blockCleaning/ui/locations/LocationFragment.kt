@@ -8,8 +8,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.fragment_location.*
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import tama.blockCleaning.MapsActivity
+import tama.blockCleaning.R
 import tama.blockCleaning.databinding.FragmentLocationBinding
 
 
@@ -38,6 +40,9 @@ class LocationFragment : Fragment() {
 
         locationAdapter = LocationAdapter(mutableListOf())
         locationAdapter.loadLocations(requireContext())
+
+        val rvLocationItems = view.findViewById<RecyclerView>(R.id.rvLocationItems)
+        val btnAddLocation = view.findViewById<FloatingActionButton>(R.id.btnAddLocation)
 
         rvLocationItems.adapter = locationAdapter
         rvLocationItems.layoutManager = LinearLayoutManager(this.context)

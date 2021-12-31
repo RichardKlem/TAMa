@@ -2,8 +2,6 @@
     <string name="app_name">Street cleaning Brno</string>
     <string name="title_home">Home</string>
     <string name="title_events">Events</string>
-    <string name="title_locations">Locations</string>
-    <string name="title_map">Map</string>
     <string name="add_location">Add Location</string>
     <string name="delete_location">Delete Location</string>
     <string name="settings">Settings</string>
@@ -11,27 +9,17 @@
     <string name="no_event_for_location">No cleaning events</string>
     <string name="enable_notif">Enable Notifications</string>
     <string name="date" translatable="false">24.12.</string>
-    <string name="date_early" translatable="false">8.12.</string>
     <string name="time" translatable="false">8:00 – 12:00</string>
-    <string name="startTime" translatable="false">8:00</string>
-    <string name="endTime" translatable="false">13:00</string>
-    <string name="placeholder_location_name" translatable="false">Božetěchova</string>
-
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Synchronization</string>
 
     <!-- Preference Titles -->
     <string name="notifications">Notifications</string>
-    <string name="language">Language</string>
 
     <!-- Sync Preferences -->
-    <string name="select_language">Select Language</string>
     <string name="street_add_button_text">Add</string>
     <string name="searchViewQueryHint">Search Address</string>
     <string name="searchIconDescription">Search Icon</string>
     <string name="area">Area</string>
     <string name="radiusOnLocation" translatable="false">+%d m</string>
-    <string name="unknownLocation">Unknown street :(</string>
     <string name="unknownStreet">Cannot find the street. Try again with different location.</string>
     <string name="map_marker">Map Marker</string>
 </resources>

@@ -3,24 +3,17 @@
     <string name="app_name">Blokové čištění Brno</string>
     <string name="title_home">Domov</string>
     <string name="title_events">Aktuální čištění</string>
-    <string name="title_map">Mapa</string>
-    <string name="title_locations">Oblast</string>
     <string name="add_location">Přidej oblast</string>
     <string name="delete_location">Vymaž oblast</string>
     <string name="settings">Nastavení</string>
     <string name="event">Aktuální čištění</string>
-    <string name="language">Jazyk</string>
-    <string name="messages_header">Zprávy</string>
-    <string name="sync_header">Synchronizace</string>
     <string name="notifications">Upozornění</string>
     <string name="enable_notif">Povolit Upozornění</string>
-    <string name="select_language">Vyberte jazyk</string>
     <string name="no_event_for_location">Žádné čištění</string>
     <string name="street_add_button_text">Přidat ulici</string>
     <string name="searchViewQueryHint">Vyhledat ulici</string>
     <string name="searchIconDescription">Ikona vyhledávání</string>
     <string name="area">Oblast</string>
-    <string name="unknownLocation">Neznámá ulice :(</string>
     <string name="unknownStreet">Ulice nenalezena. Opakujte výběr s jiným výběrem.</string>
     <string name="map_marker">Značka pozice</string>
 </resources>
