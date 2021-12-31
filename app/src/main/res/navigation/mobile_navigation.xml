@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_events"
-        android:name="com.example.tama.ui.events.EventsFragment"
+        android:name="tama.blockCleaning.ui.events.EventsFragment"
         android:label="@string/title_events"
         tools:layout="@layout/fragment_events" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.example.tama.ui.locations.LocationFragment"
+        android:name="tama.blockCleaning.ui.locations.LocationFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_location">
         <action
